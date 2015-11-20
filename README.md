@@ -20,4 +20,8 @@ ZorgBox is distributed as Apache2 free software license
   - Connect your raspberry with SSH and "take the power" as root user
 
 		sudo -s
-
+  - Upate apt and install git
+  
+		apt-get update
+		apt-get install git-core
+  
