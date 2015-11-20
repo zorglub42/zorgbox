@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<advancedsettings>
+	<loglevel>2</loglevel>
+	<debug>
+		<extralogging>true</extralogging>
+		<setextraloglevel>64,2048,32768</setextraloglevel>
+		<showloginfo>false</showloginfo>
+	</debug>
+</advancedsettings>

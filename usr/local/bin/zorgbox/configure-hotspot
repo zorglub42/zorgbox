@@ -1,0 +1,61 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/configure-hotspot
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Set configuration parameter to switch device as WIFI hotspot
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+
+cd `dirname $0`
+
+
+
+cat /etc/zorgbox/network.json  | sed "s/\(.*wlan0Mode\": \"\).*\(\".*\)/\1hotspot\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+cat /etc/zorgbox/network.json  | sed "s/\(.*hotspotPASS\": \"\).*\(\".*\)/\1$1\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+cat /etc/zorgbox/network.json | sed "s/\(.*ifGw\": \"\).*\(\"\)/\1$2\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+cat /etc/zorgbox/network.json  | sed "s/\(.*pin\": \"\).*\(\".*\)/\1$3\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+cat /etc/zorgbox/network.json  | sed "s/\(.*APN\": \"\).*\(\".*\)/\1$4\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+cat /etc/zorgbox/network.json  | sed "s/\(.*APNUser\": \"\).*\(\".*\)/\1$5\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+cat /etc/zorgbox/network.json  | sed "s/\(.*APNPass\": \"\).*\(\".*\)/\1$6\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+
+if [ "$7" == "" ] ; then
+	ETH_MODE=client
+else
+	ETH_MODE=hotspot
+fi
+cat /etc/zorgbox/network.json  | sed "s/\(.*eth0Mode\": \"\).*\(\".*\)/\1$ETH_MODE\2/" >/tmp/$$.json
+mv /tmp/$$.json /etc/zorgbox/network.json
+
+./configure-interfaces &>>/var/log/zorgbox.log
+./configure-services &>>/var/log/zorgbox.log

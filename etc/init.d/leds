@@ -1,0 +1,74 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          leds
+# Required-Start:    
+# Required-Stop:     checkkodi
+# Default-Start:     2 3 4 5 
+# Default-Stop:      0 1 6
+# Short-Description: Start or stop the leds status daemon
+# Description:       Start or stop the leds status daemon
+### END INIT INFO
+
+NAME=leds
+DAEMON=/usr/local/bin/zorgbox/leds.sh
+ENABLE_DAEMON=1
+
+export PATH="${PATH:+$PATH:}/sbin"
+
+[ -x $DAEMON ] || exit 0
+
+[ -e /etc/default/$NAME ] && . /etc/default/$NAME
+
+. /lib/lsb/init-functions
+
+start_daemon () {
+    if [ $ENABLE_DAEMON != 1 ]; then
+        log_progress_msg "(disabled)"
+                log_end_msg 255 || true
+    else
+	touch  /var/run/leds.run
+        start-stop-daemon --start --background \
+                $START_STOP_OPTIONS \
+        --exec $DAEMON -- $OPTIONS || log_end_msg $?
+                log_end_msg 0
+    fi
+}
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting leds daemon" "$NAME"
+        start_daemon
+        ;;
+    stop)
+        log_daemon_msg "Stopping leds daemon" "$NAME"
+	[ -f  /var/run/leds.run ] && rm  /var/run/leds.run
+        start-stop-daemon --stop --quiet \
+            --exec $DAEMON \
+            --oknodo || log_end_msg $?
+        log_end_msg 0
+        ;;
+    reload)
+        log_daemon_msg "Reloading leds daemon" "$NAME"
+        start-stop-daemon --stop --quiet \
+            --exec $DAEMON \
+            --oknodo --signal 1 || log_end_msg $?
+        log_end_msg 0
+        ;;
+    restart|force-reload)
+        log_daemon_msg "Restarting leds daemon" "$NAME"
+        start-stop-daemon --stop --quiet --background \
+            --oknodo || log_end_msg $?
+        start_daemon
+        ;;
+    status)
+        status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+        ;;
+    *)
+        log_action_msg "Usage: /etc/init.d/$NAME {start|stop|reload|force-reload|restart|status}" || true
+        exit 2
+        ;;
+esac
+
+exit 0
+
+

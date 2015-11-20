@@ -1,0 +1,43 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/set-hostname
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Define device hostname (API Implem)
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+ if [ "$1" != "" ] ; then
+	H=`echo $1|sed 's/ //g'`
+
+	OLD_HOST=`cat /etc/hostname`
+	if [ $H != $OLD_HOST ] ; then
+		echo $H >/etc/hostname
+		hostname $H
+
+		service minidlna restart
+		systemctl restart mediacenter
+		service checkkodi restart
+		cat /etc/hosts|sed "s/$OLD_HOST/$H/">/tmp/$$.hosts
+		mv /tmp/$$.hosts /etc/hosts
+	fi
+	
+	exit 0
+else
+	echo "usage: "`basename $0`" new-hostname"
+fi

@@ -1,0 +1,60 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/configure-services
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Generate services configuration files and settings
+ #	- dnsmasq
+ #	- hostapd
+ #	- wvdial
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+
+WVDIAL_ACTION=stop
+HOSTAPD_ACTION=stop
+DNSMASQ_ACTION=stop
+grep '"hotspot"' /etc/zorgbox/network.json > /dev/null
+if [ $? -eq 0 ] ; then
+	update-rc.d hostapd enable
+	update-rc.d dnsmasq enable
+	DNSMASQ_ACTION=restart
+	HOSTAPD_ACTION=restart
+	grep '"ppp0"' /etc/zorgbox/network.json > /dev/null
+	if [ $? -eq 0 ] ; then
+		cat /etc/default/wvdial | sed 's/ENABLE_WVDIAL_DAEMON=.*/ENABLE_WVDIAL_DAEMON=true/'>/tmp/$$.conf
+		mv /tmp/$$.conf /etc/default/wvdial
+		WVDIAL_ACTION=restart
+	else
+		cat /etc/default/wvdial | sed 's/ENABLE_WVDIAL_DAEMON=.*/ENABLE_WVDIAL_DAEMON=false/'>/tmp/$$.conf
+		mv /tmp/$$.conf /etc/default/wvdial
+	fi
+else
+	update-rc.d hostapd disable
+	update-rc.d dnsmasq disable
+	cat /etc/default/wvdial | sed 's/ENABLE_WVDIAL_DAEMON=.*/ENABLE_WVDIAL_DAEMON=false/'>/tmp/$$.conf
+	mv /tmp/$$.conf /etc/default/wvdial
+fi
+/etc/init.d/wvdial stop
+ps aux| grep wvdial | grep -v grep | awk '{print $2}'| xargs kill -9
+echo service dnsmasq $DNSMASQ_ACTION
+service dnsmasq $DNSMASQ_ACTION
+echo service wvdial $WVDIAL_ACTION
+/etc/init.d/wvdial start
+echo service hostapd $HOSTAPD_ACTION
+service hostapd $HOSTAPD_ACTION

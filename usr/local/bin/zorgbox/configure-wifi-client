@@ -1,0 +1,88 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/configure-wifi-client
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Generate network configuration files to switch device a WIFI client
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+ 
+cd `dirname $0`
+
+if [ $# -lt 2 ] ; then
+	echo usage $0 ssid pass [test]
+	exit 1
+fi
+[ "$3" == "test"  -a -f /etc/wpa_supplicant/wpa_supplicant.conf ] && cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.sav
+[ "$3" == "test"  -a -f /etc/network/interfaces ] && cp /etc/network/interfaces /etc/network/interfaces.sav
+cat /etc/wpa_supplicant/wpa_supplicant.conf|sed "s/\(.*ssid=\"\).*\"/\1$1\"/"|sed "s/\(.*psk=\"\).*\"/\1$2\"/">/tmp/$$.log
+mv /tmp/$$.log /etc/wpa_supplicant/wpa_supplicant.conf
+
+
+cat /etc/zorgbox/network.json |sed 's/\(.*"wlan0Mode": "\).*\(",\).*/\1client\2/'>>/tmp/$$.json
+cat /tmp/$$.json |sed 's/\(.*"eth0Mode": "\).*\(",\).*/\1client\2/'>>/tmp/$$.json1
+mv /tmp/$$.json1 /tmp/$$.json
+./configure-interfaces /tmp/$$.json
+
+
+(ifup --force wlan0   &)&>> /var/log/zorgbox.log
+ifupPID=$!
+(tail -f /var/log/syslog |tee /tmp/$$.log >/dev/null &) &>> /var/log/zorgbox.log
+
+tailPID=$!
+sleep 5
+
+
+kill -9 $ifupPID $tailPID >/dev/null 2>/dev/null
+egrep "CTRL-EVENT-CONNECTED" /tmp/$$.log >/dev/null
+if [ $? -eq 0 ] ; then
+	rc=1
+else
+	rc=0
+fi
+echo '{'
+echo '   "connected": '$rc
+echo '}'
+[ "$3" == "test" -a -f /etc/wpa_supplicant/wpa_supplicant.conf.sav ] && mv /etc/wpa_supplicant/wpa_supplicant.conf.sav /etc/wpa_supplicant/wpa_supplicant.conf 
+[ "$3" == "test"  -a -f /etc/network/interfaces.sav ] && cp /etc/network/interfaces.sav /etc/network/interfaces
+
+if [ $rc -eq 1 ] ; then
+	if [ "$3" == "" ] ; then
+		
+		grep '"wlan0Mode": "hotspot"' /etc/zorgbox/network.json >/dev/null
+		if [ $? -eq 0 ] ; then
+			ifdown --force wlan0 &>> /var/log/zorgbox.log
+			ifup --force wlan0 &>> /var/log/zorgbox.log
+			cp /tmp/$$.json /etc/zorgbox/network.json
+			./configure-services &>> /var/log/zorgbox.log
+
+		fi
+		cp /tmp/$$.json /etc/zorgbox/network.json
+	else
+			grep '"wlan0Mode": "hotspot"' /etc/zorgbox/network.json >/dev/null
+			if [ $? -eq 0 ] ; then
+
+			./configure-interfaces
+			ifdown --force wlan 0 &>> /var/log/zorgbox.log
+			ifup --force wlan0 &>> /var/log/zorgbox.log
+			service hostapd restart &>> /var/log/zorgbox.log
+		fi
+	fi
+fi
+rm /tmp/$$.*

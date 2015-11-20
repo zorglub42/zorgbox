@@ -1,0 +1,8 @@
+Defaults:www-data    !requiretty
+Cmnd_Alias	SSID_LIST=/usr/local/bin/zorgbox/wifi-ssid-list
+Cmnd_Alias	SET_WIFI_CREDS=/usr/local/bin/zorgbox/configure-wifi-client
+Cmnd_Alias	SET_HOTSPOT=/usr/local/bin/zorgbox/configure-hotspot
+Cmnd_Alias	SET_HOSTNAME=/usr/local/bin/zorgbox/set-hostname
+Cmnd_Alias	SHUTDOWN=/usr/local/bin/zorgbox/shutdown
+Cmnd_Alias	RESTART=/usr/local/bin/zorgbox/restart
+User_Alias      F314_USER=www-data  F314_USER       ALL = NOPASSWD: SSID_LIST, SET_WIFI_CREDS, SHUTDOWN, SET_HOTSPOT, SET_HOSTNAME

@@ -1,0 +1,88 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/configure-interfaces
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Generate network configuration files (interfaces, iptables, sysconf)
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+
+CONF_DIR=/usr/local/bin/zorgbox
+
+
+if [ "$1" != "" ] ; then
+	CONF=$1
+else
+	CONF=/etc/zorgbox/network.json
+fi
+
+cp $CONF_DIR/interfaces.base /etc/network/interfaces
+:>/etc/dnsmasq.d/hotspot.conf
+
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+grep '"eth0Mode": "client"' $CONF >/dev/null
+if [ $? -eq 0 ] ; then
+	cat $CONF_DIR/interfaces.eth0.client  >>/etc/network/interfaces
+	EXCLUDE_IF=eth0
+else
+	cat $CONF_DIR/interfaces.eth0.hotspot  >>/etc/network/interfaces
+	cat $CONF_DIR/hotspot.conf.eth0 >>/etc/dnsmasq.d/hotspot.conf
+	EXCLUDE_IF=""
+fi
+
+
+grep '"wlan0Mode": "client"' $CONF >/dev/null
+if [ $? -eq 0 ] ; then
+	cat $CONF_DIR/interfaces.wlan0.client  >>/etc/network/interfaces
+	:>/etc/iptables.ipv4.nat
+
+	cat /etc/sysctl.conf  | grep -v net.ipv4.ip_forward>/tmp/$$.conf
+	mv /tmp/$$.conf /etc/sysctl.conf
+	echo 0 > /proc/sys/net/ipv4/ip_forward
+
+
+else
+	PASS=`cat $CONF | grep hotspotPASS|awk -F '"' '{print $4}'`
+	SSID=`hostname`
+	cat $CONF_DIR/hostapd.conf | sed "s/HOSTNAME/$SSID/"|sed "s/PASS/$PASS/" >/etc/hostapd/hostapd.conf
+	cat $CONF_DIR/interfaces.wlan0.hotspot  >>/etc/network/interfaces
+	GW=`cat $CONF | grep ifGw|awk -F '"' '{print $4}'`	
+	cat $CONF_DIR/iptables.ipv4.nat | grep -v " $EXCLUDE_IF " |sed "s/IFGW/$GW/g" > /etc/iptables.ipv4.nat
+	iptables-restore /etc/iptables.ipv4.nat
+	cat $CONF_DIR/dnsmasq.conf | sed "s/no-dhcp-interface=.*/no-dhcp-interface=$EXCLUDE_IF/" > /etc/dnsmasq.conf
+
+	cat $CONF_DIR/hotspot.conf.wlan0 >>/etc/dnsmasq.d/hotspot.conf
+
+
+	cat /etc/sysctl.conf  | grep -v net.ipv4.ip_forward>/tmp/$$.conf
+	mv /tmp/$$.conf /etc/sysctl.conf
+	echo net.ipv4.ip_forward=1>>/etc/sysctl.conf
+	echo 1 > /proc/sys/net/ipv4/ip_forward
+
+
+fi
+iptables-restore <  /etc/iptables.ipv4.nat

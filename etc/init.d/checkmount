@@ -1,0 +1,79 @@
+#!/bin/sh
+ #--------------------------------------------------------
+ # Module Name : Daemons
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /etc/init.d/checkkodi
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Drive mount/unmount monitoring daemon control script
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+
+### BEGIN INIT INFO
+# Provides:          checkmount
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Should-Start:      $local_fs
+# Should-Stop:       $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Check for auto mount
+# Description:       Check for auto mount
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+. /lib/lsb/init-functions
+
+NAME=checkmount
+DAEMON=/usr/local/bin/zorgbox/checkmount.sh
+DESC="Auto mounting/unmounting disk detection"
+DAEMON_ARGS=""
+PIDFILE=/var/run/$NAME.pid
+
+test -x $DAEMON || exit 5
+
+if [ -f /etc/default/$NAME ] ; then
+    . /etc/default/$NAME
+fi
+
+case "$1" in
+    start)
+	    log_daemon_msg "Starting $DESC" "$NAME"
+        modprobe i8k >/dev/null 2>&1 || true
+	    start-stop-daemon --start --quiet --pidfile $PIDFILE \
+    	    --background --make-pidfile --startas $DAEMON -- $DAEMON_ARGS
+        log_end_msg $?
+    	;;
+    stop)
+    	log_daemon_msg "Stopping $DESC" "$NAME"
+    	start-stop-daemon --oknodo --stop --quiet --pidfile $PIDFILE
+        log_end_msg $?
+    	rm -f $PIDFILE
+	    ;;
+    status)
+        status_of_proc -p $PIDFILE $DAEMON $NAME
+        ;;
+    restart|reload|force-reload)
+        $0 stop && sleep 2 && $0 start
+	    ;;
+    *)
+    	echo "Usage: $0 {start|stop|status|restart|reload|force-reload}" >&2
+	    exit 2
+    	;;
+esac
+

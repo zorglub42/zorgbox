@@ -1,0 +1,63 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/wifi-ssid-list
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     Generate WIFI ssids neigborghood  (API Implem)
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+iwlist wlan0 scan|egrep "ESSID|Quality"|(
+while read l ; do
+        read l2;
+        echo $l"->"$l2
+done
+)|sort -f >/tmp/$$.log
+LN_COUNT=`cat /tmp/$$.log| wc -l`
+i=1
+echo '['
+while read -r l ; do
+
+        ssid=`echo $l|awk -F '"' '{print $2}'`
+        quality=`echo $l|sed 's/.*Quality.\([0-9]*\).*/\1/'`
+		if [ "$ssid" != "" ] ; then
+			if [ $quality -lt 20 ] ; then
+					quality=1
+			elif [ $quality -lt 40 ] ; then
+					quality=2
+			elif [ $quality -lt 60 ] ; then
+					quality=3
+			elif [ $quality -lt 80 ] ; then
+					quality=4
+			else
+					quality=5
+			fi
+
+			echo "  {"
+			echo "          \"ssid\": \""$ssid"\","
+			echo "          \"quality\": "$quality
+			if [ $i -ne $LN_COUNT ] ; then
+					echo "  },"
+			else
+					echo "  }"
+			fi
+		fi
+		i=`expr $i + 1`
+done< /tmp/$$.log
+echo ']'
+rm /tmp/$$.log

@@ -1,0 +1,12 @@
+#!/bin/sh
+WLAN_IP=`ifconfig wlan0| grep "inet adr"| awk -F ":" '{print $2}'| awk '{print $1}'`
+
+cat /etc/hosts| grep -v -i `hostname`>/tmp/$$.hosts
+if [ "$WLAN_IP" != "" ] ; then
+	echo $WLAN_IP `hostname` >>/tmp/$$.hosts
+else
+	echo 127.0.0.1	`hostname` >>/tmp/$$.hosts
+fi
+mv /tmp/$$.hosts /etc/hosts
+#service checkkodi restart
+

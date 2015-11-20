@@ -1,0 +1,73 @@
+#!/bin/sh
+ #--------------------------------------------------------
+ # Module Name : Daemons
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /etc/init.d/wvdial
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     wvdial daemon control script
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+
+### BEGIN INIT INFO
+# Provides:          wvdial
+# Default-Start:     2 3 4 5
+# Required-Start:    $network $local_fs $remote_fs
+# Required-Stop::    $network $local_fs $remote_fs
+# Default-Stop:      0 1 6
+# Short-Description: Simple script to start a program at boot
+# Description:       A simple script from www.stuffaboutcode.com which will start / stop a program a boot / shutdown.
+### END INIT INFO
+
+# If you want a command to always run, put it here
+NAME=wvdial
+ENABLE_WVDIAL_DAEMON=true
+DAEMON=/usr/bin/wvdial
+DAEMON_ARGS=Net
+
+. /etc/default/$NAME
+
+PIDFILE=/var/run/wvdial.pid
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    if [ $ENABLE_WVDIAL_DAEMON != "true" ] ; then
+	echo "Daemon disabled by configuration see /etc/default/$NAME"
+	exit 0
+    fi
+    echo "Starting GPRS Internet"
+    # run application you want to start
+    while ip route del default; do : echo boucle folle; done
+    /usr/bin/wvdial pin >/dev/null 2>&1
+    /sbin/start-stop-daemon --start --background  --make-pidfile --pidfile $PIDFILE  --startas /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS >> /var/log/wvdial.log 2>&1"
+    ;;
+  stop)
+    echo "Stopping GPRS Internet"
+    # kill application you want to stop
+    /sbin/start-stop-daemon --stop --exec /usr/bin/wvdial 
+    ifdown --force eth0
+    ifup --force eth0
+    ;;
+  *)
+    echo "Usage: /etc/init.d/wvdial {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+

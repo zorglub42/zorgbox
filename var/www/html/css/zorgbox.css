@@ -1,0 +1,79 @@
+/*--------------------------------------------------------
+ * Module Name : AdminWebApp
+ * Version : 1.0.0
+ *
+ * Software Name : ZorgBox
+ * Version : 1.0
+ *
+ * Copyright (c) 2015 Zorglub42
+ * This software is distributed under the Apache 2 license
+ * <http://www.apache.org/licenses/LICENSE-2.0.html>
+ *
+ *--------------------------------------------------------
+ * File Name   : css/zorgbox.css
+ *
+ * Created     : 2015-11
+ * Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ *
+ * Description :
+ *     Application style
+ *--------------------------------------------------------
+ * History     :
+ * 1.0.0 - 2015-11-18 : Release of the file
+*/
+html { 
+	margin:0;
+	padding:0;
+#	background: url(../images/zorgbox-bkg.png) no-repeat top left fixed; 
+	background-repeat:no-repeat;
+	background-position: center center;
+#	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
+#	background-size: cover; /* version standardisée */
+}
+.menu-item{
+	height: 25%;
+}
+.vertical-offset-100{
+	padding-top:100px;
+	top: 20%;
+}
+.vertical-offset-50{
+	padding-top:20px;
+	top: 10%;
+}
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.errorMessage
+{
+	color: orangered;
+	display: inline;
+	#text-align: center;
+	#padding-left: 10px;
+	#padding-right: 10px;
+	#margin: 10px;
+}
+.ellipsis{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.rounded-corners {
+     -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+}
+
+
+.login-logo{
+	margin: auto
+}
+
+
+.wifiModeSelected{
+	border-color: #FF0000;
+}

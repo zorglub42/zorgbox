@@ -1,0 +1,52 @@
+<sources>
+    <programs>
+        <default pathversion="1"></default>
+    </programs>
+    <video>
+        <default pathversion="1"></default>
+        <source>
+            <name>Carte SD Interne</name>
+            <path pathversion="1">/home/osmc/Carte SD Interne/Video/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>USB</name>
+            <path pathversion="1">/media/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </video>
+    <music>
+        <default pathversion="1"></default>
+        <source>
+            <name>Carte SD Interne</name>
+            <path pathversion="1">/home/osmc/Carte SD Interne/Musique/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>USB</name>
+            <path pathversion="1">/media/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Radios</name>
+            <path pathversion="1">/home/osmc/Carte SD Interne/Radios/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </music>
+    <pictures>
+        <default pathversion="1"></default>
+        <source>
+            <name>Carte SD Interne</name>
+            <path pathversion="1">/home/osmc/Carte SD Interne/Photos/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>USB</name>
+            <path pathversion="1">/media/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+    </pictures>
+    <files>
+        <default pathversion="1"></default>
+    </files>
+</sources>

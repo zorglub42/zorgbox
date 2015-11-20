@@ -1,0 +1,61 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          buttons
+# Required-Start:    
+# Required-Stop:     leds
+# X-Stop-After:      syslog-ng
+# Should-Start:      
+# Should-Stop:       
+# Default-Start:     S 1 2 3 4 5
+# Default-Stop:      0 6 
+# Short-Description: Push button to start or stop the RPI
+# Description:       Push button to start or stop the RPI
+
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+. /lib/lsb/init-functions
+
+NAME=start-stop-mngr
+DAEMON=/usr/local/bin/zorgbox/buttons.sh
+DAEMON_ARGS="''"
+DESC="push button to start or stop the RPI"
+PIDFILE=/var/run/$NAME.pid
+
+
+test -x $DAEMON || exit 5
+
+if [ -f /etc/default/$NAME ] ; then
+    . /etc/default/$NAME
+fi
+
+case "$1" in
+    start)
+	    log_daemon_msg "Starting $DESC" "$NAME"
+	     start-stop-daemon --start  --pidfile $PIDFILE \
+    	     --background --make-pidfile --startas $DAEMON -- $DAEMON_ARGS
+        log_end_msg $?
+    	;;
+    stop)
+	/usr/local/bin/gpio write 5 0
+	/usr/local/bin/lcdclear
+	/usr/local/bin/lcdbacklight 0
+    	log_daemon_msg "Stopping $DESC" "$NAME"
+    	start-stop-daemon --oknodo --stop --quiet --pidfile $PIDFILE
+        log_end_msg $?
+    	rm -f $PIDFILE
+	    ;;
+    status)
+        status_of_proc -p $PIDFILE $DAEMON $NAME
+        ;;
+    restart|reload|force-reload)
+        $0 stop && sleep 2 && $0 start
+	    ;;
+    *)
+    	echo "Usage: $0 {start|stop|status|restart|reload|force-reload}" >&2
+	    exit 2
+    	;;
+esac
+
