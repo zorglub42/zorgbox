@@ -26,6 +26,7 @@
 find . | sed 's/^\.//' \
 	   | sed 's/\/[^\/]*sh/EXCLUDE/' \
 	   | sed 's/\/\.git*/EXCLUDE/' \
+	   | sed 's/\/\boot*/EXCLUDE/' \
 	   | sed 's/\/install.log/EXCLUDE/' \
 	   | sed 's/\/README.*/EXCLUDE/' \
 	   | sed 's/\/LICENSE/EXCLUDE/' \

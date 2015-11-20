@@ -22,8 +22,6 @@
  # History     :
  # 1.0.0 - 2015-11-18 : Release of the file
  #
- 
-systemctl stop mediacenter
 echo "Installing required packages"
 wget http://goo.gl/rsel0F -O /etc/apt/sources.list.d/rpimonitor.list
 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
