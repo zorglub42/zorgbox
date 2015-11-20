@@ -80,6 +80,10 @@ if [ $? -ne 0 ] ; then
 	echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
 	cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
 	make
+	make install
+	mv hostapd /usr/sbin/hostapd
+	chown root.root /usr/sbin/hostapd
+	chmod 755 /usr/sbin/hostapd	
 	
 	cp /boot/config.txt.PI /boot/config.txt
 else
@@ -109,8 +113,8 @@ echo "" >> $$.tmp
 adduser -q guest --home=/home/public --shell=/bin/false --disabled-password<$$.tmp
 rm $$.tmp
 
-chown -r osmc:osmc /home/osmc
-chown -r guest:osmc "/home/osmc/Carte SD Interne"
+chown -R osmc:osmc /home/osmc
+chown -R guest:osmc "/home/osmc/Carte SD Interne"
 
 echo "Setting default configuration"
 /usr/local/bin/zorgbox/reset.sh
