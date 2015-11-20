@@ -75,6 +75,7 @@ if [ -d "zorgbox.sav" ] ; then
 	mv  zorgbox.sav /etc/zorgbox
 fi
 ./snapshot.sh
+systemctl disable connman
 update-rc.d buttons defaults
 update-rc.d checkkodi defaults 
 update-rc.d checkmount defaults 
