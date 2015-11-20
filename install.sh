@@ -24,25 +24,25 @@
  #
 echo "Installing required packages"
 apt-get update
-apt-get upgrade
-apt-get install -y net-tools
-apt-get install -y ifupdown
-apt-get install -y ppp rdnssd iproute2-doc isc-dhcp-client libatm1
-apt-get install -y resolvconf  ndisc6
-apt-get install -y perl-doc libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl liblog-message-simple-perl liblog-message-perl libobject-accessor-perl
-apt-get install -y rename libarchive-extract-perl libmodule-pluggable-perl libpod-latex-perl  libterm-ui-perl libtext-soundex-perl libcgi-pm-perl libmodule-build-perl libpackage-constants-perl
-apt-get install -y make-doc man-db groff
-apt-get install -y libcgi-fast-perl libmodule-signature-perl libpod-readme-perl  libsoftware-license-perl
-apt-get install -y libclass-c3-xs-perl
-apt-get install -y syslog-ng
-apt-get install -y syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp logrotatehostapd
-apt-get install -y build-essential
-apt-get install -y dnsmasq
-apt-get install -y dnsmasq-base libmnl0 libnetfilter-conntrack3
-apt-get install -y apache2 php5
-apt-get install -y wireless-tools
-apt-get install -y ifmetric
-apt-get install -y samba
+apt-get -y upgrade
+apt-get -y install net-tools
+apt-get -y install ifupdown
+apt-get -y install ppp rdnssd iproute2-doc isc-dhcp-client libatm1
+apt-get -y install resolvconf  ndisc6
+apt-get -y install perl-doc libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl liblog-message-simple-perl liblog-message-perl libobject-accessor-perl
+apt-get -y install rename libarchive-extract-perl libmodule-pluggable-perl libpod-latex-perl  libterm-ui-perl libtext-soundex-perl libcgi-pm-perl libmodule-build-perl libpackage-constants-perl
+apt-get -y install make-doc man-db groff
+apt-get -y install libcgi-fast-perl libmodule-signature-perl libpod-readme-perl  libsoftware-license-perl
+apt-get -y install libclass-c3-xs-perl
+apt-get -y install syslog-ng
+apt-get -y install syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp logrotatehostapd
+apt-get -y install build-essential
+apt-get -y install dnsmasq
+apt-get -y install dnsmasq-base libmnl0 libnetfilter-conntrack3
+apt-get -y install apache2 php5
+apt-get -y install wireless-tools
+apt-get -y install ifmetric
+apt-get -y install samba minidlna
 
 
 echo ".gitignore" >.gitignore
@@ -69,7 +69,18 @@ cp -r var /
 
 uname -a | grep armv7l>/dev/null
 if [ $? -ne 0 ] ; then
-	cp  usr/local/bin/armv6/* /usr/local/bin
+	echo 'Making ARMV6 compliant wiringPI lib & tools'
+	cd /usr/local/src/wiringPi
+	./build
+
+	echo 'Making ARMV6 compliant lcd utilites'
+	cd /usr/local/src/lcd-sparkfun
+	make clean; make install
+	
+	echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
+	cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
+	make
+	
 	cp /boot/config.txt.PI /boot/config.txt
 else
 	cp /boot/config.txt.PI2 /boot/config.txt
