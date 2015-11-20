@@ -24,4 +24,27 @@ ZorgBox is distributed as Apache2 free software license
   
 		apt-get update
 		apt-get install git-core
+  - Download zorgbox
+  
+		git clone https://github.com/zorglub42/zorgbox
+
+  - And install
+  
+		cd zorgbox
+		./install
+By the end of the install process it will ask you for a brand new password for the user osmc (security reason) and it will reboot.
+
+At this time UNPLUG THE ETHERNET CABLE
+
+
+
+
+After reboot you may find a wifi hotspot named "zorgbox", connect it (default pass-phrase is 0123456789)
+
+Then, with your browser go to http://zorgbox and connect with admin/zorgbox to configure it
+
+
+
+Enjoy!
+
   
