@@ -6,7 +6,7 @@ ZorgBox is distributed as Apache2 free software license
 
 
 #Requirements
- * A raspberry (of course)
+ * A raspberry (of course) with OMSC freshly installed (and not configured)
  * A WIFI USB dongle based on Realtek  RTL8188CUSB shipset
  * A 3G modem (Huawei E67) If you plan to use zorgbox as a 3G Internet Acces Point
  * SparkFun serial LCD (LCD-10097) If you plan to have a LCD display on the box
@@ -15,3 +15,8 @@ ZorgBox is distributed as Apache2 free software license
  * 1 relay (2 position) + 1 push button If you plan to have a start-stop button
  * 1 push button If you plan to have a reset factory settings button
  
+#Installation
+
+First connect you raspberry with SSH and "swtich as root :
+
+   sudo -s
