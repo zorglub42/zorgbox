@@ -86,4 +86,5 @@ update-rc.d checkmount defaults
 update-rc.d leds defaults 
 update-rc.d wvdial defaults 
 
+echo "Setting default configuration"
 /usr/local/bin/zorgbox/reset.sh
