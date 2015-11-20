@@ -1,0 +1,16 @@
+hdmi_drive=2
+gpu_mem_1024=256
+over_voltage_sdram=0
+over_voltage=2
+disable_splash=1
+initial_turbo=0
+start_x=1
+max_usb_current=1
+sdtv_aspect=1
+disable_overscan=1
+hdmi_force_hotplug=1
+force_turbo=0
+arm_freq=1000
+core_freq=500
+sdram_freq=450
+hdmi_ignore_cec_init=1

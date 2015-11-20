@@ -69,6 +69,10 @@ cp -r var /
 
 uname -a | grep armv7l>/dev/null
 if [ $? -ne 0 ] ; then
+	cp  usr/local/bin/armv6/* /usr/local/bin
+	cp /boot/config.txt.PI /boot/config.txt
+else
+	cp /boot/config.txt.PI2 /boot/config.txt
 fi
 
 if [ -d "zorgbox.sav" ] ; then
