@@ -97,5 +97,20 @@ update-rc.d checkmount defaults
 update-rc.d leds defaults 
 update-rc.d wvdial defaults 
 
+chown osmc:osmc /home/osmc
+echo samba user > $$.tmp
+echo samba user >> $$.tmp
+echo samba user >> $$.tmp
+echo samba user >> $$.tmp
+echo samba user >> $$.tmp
+echo "" >> $$.tmp
+ 
+
+adduser -q guest --home=/home/public --shell=/bin/false --disabled-password<$$.tmp
+rm $$.tmp
+
+chown -r osmc:osmc /home/osmc
+chown -r guest:osmc "/home/osmc/Carte SD Interne"
+
 echo "Setting default configuration"
 /usr/local/bin/zorgbox/reset.sh
