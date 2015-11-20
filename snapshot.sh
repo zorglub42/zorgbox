@@ -23,6 +23,7 @@
  # 1.0.0 - 2015-11-18 : Release of the file
  #
 
+echo "Snapshoting install"
 find . | sed 's/^\.//' \
 	   | sed 's/\/[^\/]*sh/EXCLUDE/' \
 	   | sed 's/\/\.git*/EXCLUDE/' \

@@ -53,12 +53,22 @@ if [ -f "install.log" ] ; then
 	done < install.log
 	cp -r /etc/zorgbox zorgbox.sav
 fi
+./snapshot.sh
 
 echo "Copying distrib"
 cp -r etc /
 cp -r home /
 cp -r usr /
 cp -r var /
+
+
+uname -a | grep armv7l>/dev/null
+if [ $? -ne 0 ] ; then
+	
+	cp boot/config.txt.PI /boot/config.txt
+else
+	cp boot/config.txt.PI2 /boot/config.txt
+fi
 
 
 echo 'Making ARMV6 compliant wiringPI lib & tools'
@@ -84,18 +94,10 @@ chown root.root /usr/sbin/hostapd
 chmod 755 /usr/sbin/hostapd	
 cd -
 
-uname -a | grep armv7l>/dev/null
-if [ $? -ne 0 ] ; then
-	
-	cp boot/config.txt.PI /boot/config.txt
-else
-	cp boot/config.txt.PI2 /boot/config.txt
-fi
 
 if [ -d "zorgbox.sav" ] ; then
 	mv  zorgbox.sav /etc/zorgbox
 fi
-./snapshot.sh
 systemctl disable connman
 update-rc.d buttons defaults
 update-rc.d checkkodi defaults 
