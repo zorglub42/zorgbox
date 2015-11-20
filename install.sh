@@ -117,5 +117,6 @@ rm $$.tmp
 chown -R osmc:osmc /home/osmc
 chown -R guest:osmc "/home/osmc/Carte SD Interne"
 
+passwd osmc
 echo "Setting default configuration"
 /usr/local/bin/zorgbox/reset.sh
