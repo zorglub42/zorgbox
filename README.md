@@ -17,6 +17,7 @@ ZorgBox is distributed as Apache2 free software license
  
 #Installation
 
-First connect you raspberry with SSH and "swtich as root :
+  - Connect your raspberry with SSH and "take the power" as root user
 
-   sudo -s
+		sudo -s
+
