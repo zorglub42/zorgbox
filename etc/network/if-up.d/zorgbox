@@ -2,7 +2,8 @@
 WLAN_IP=`ifconfig wlan0| grep "inet adr"| awk -F ":" '{print $2}'| awk '{print $1}'`
 
 cat /etc/hosts| grep -v -i `hostname`>/tmp/$$.hosts
-if [ "$WLAN_IP" != "" ] ; then
+grep '"wlan0Mode": "hotspot"' /etc/zorgbox/network.json
+if [ $? -eq 0 ] ; then
 	echo $WLAN_IP `hostname` >>/tmp/$$.hosts
 else
 	echo 127.0.0.1	`hostname` >>/tmp/$$.hosts
