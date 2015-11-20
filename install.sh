@@ -53,7 +53,7 @@ if [ -f "install.log" ] ; then
 	done < install.log
 	cp -r /etc/zorgbox zorgbox.sav
 fi
-
+[ -f /var/www/html/index.html ] && rm /var/www/html/index.html
 echo "Copying distrib"
 cp -r etc /
 cp -r home /
