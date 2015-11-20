@@ -117,6 +117,7 @@ rm $$.tmp
 chown -R osmc:osmc /home/osmc
 chown -R guest:osmc "/home/osmc/Carte SD Interne"
 
+passwd osmc
 a2enmod rewrite proxy proxy_http
 
 echo "Setting default configuration"
