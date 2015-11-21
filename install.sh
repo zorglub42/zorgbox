@@ -71,31 +71,31 @@ else
 	cp boot/config.txt.PI2 /boot/config.txt
 fi
 
+if [ "$1" != "-nc" ] ; then
+	echo 'Making ARMV6 compliant wiringPI lib & tools'
 
-echo 'Making ARMV6 compliant wiringPI lib & tools'
+	cd /usr/local/src/
+	[ -d wiringPi ] && rm -rf wiringPi
+	git clone git://git.drogon.net/wiringPi
+	cd wiringPi
+	./build
+	cd -
 
-cd /usr/local/src/
-[ -d wiringPi ] && rm -rf wiringPi
-git clone git://git.drogon.net/wiringPi
-cd wiringPi
-./build
-cd -
+	echo 'Making ARMV6 compliant lcd utilites'
+	cd /usr/local/src/lcd-sparkfun
+	make clean; make install
+	cd -
 
-echo 'Making ARMV6 compliant lcd utilites'
-cd /usr/local/src/lcd-sparkfun
-make clean; make install
-cd -
-
-echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
-cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
-make clean
-make
-make install
-mv hostapd /usr/sbin/hostapd
-chown root.root /usr/sbin/hostapd
-chmod 755 /usr/sbin/hostapd	
-cd -
-
+	echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
+	cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
+	make clean
+	make
+	make install
+	mv hostapd /usr/sbin/hostapd
+	chown root.root /usr/sbin/hostapd
+	chmod 755 /usr/sbin/hostapd	
+	cd -
+fi
 
 if [ -d "zorgbox.sav" ] ; then
 	mv  zorgbox.sav /etc/zorgbox
