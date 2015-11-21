@@ -36,6 +36,8 @@ $strings["button.login"]="OK";
 
 $strings["menu.start-stop"]="Arrêter";
 $strings["menu.start-stop.desc"]="Arrêter proprement Framoise314 avant de le debrancher";
+$strings["menu.health"]="Santé";
+$strings["menu.health.desc"]="Etat de santé de " . gethostname() . " (anglais)"	;
 $strings["menu.wifi"]="WIFI";
 $strings["menu.wifi.desc"]="Définir le comportement WIFI (se raccorder a un réseau ou point d'accès)";
 $strings["menu.settings"]="Avancés";
