@@ -53,7 +53,7 @@ cat <<EOF > /etc/zorgbox/credentials.json
 [
     {
         "username": "admin",
-        "password": "f314"
+        "password": "zorgbox"
     }
 ]
 EOF

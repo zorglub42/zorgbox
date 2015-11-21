@@ -26,7 +26,6 @@
 tail -f /var/log/syslog|grep --line-buffered  "Device file"|(
 	while [ 1 ] ; do
 		read l
-		echo $l
 		echo $l| egrep "Device file .* mounted">/dev/null
 		if [ $? -eq 0 ] ; then
 			DEV=`echo $l | awk '{print $8}'`
@@ -52,4 +51,4 @@ tail -f /var/log/syslog|grep --line-buffered  "Device file"|(
 			done
 		fi
 	done
-) >>/var/log/checkmount.log
+)  >>/var/log/checkmount.log
