@@ -65,11 +65,11 @@ sleep 3
 /usr/local/bin/lcdbacklight $MAX_LUM
 displayWait &
 PID=$!
+./set-hostname zorgbox
 ./configure-hotspot "0123456789" "lo" "0000" "inconnu"  "inconnu"  "inconnu" "eth0"
 kill -9 $PID
 /usr/local/bin/lcdclear
 /usr/local/bin/lcdprint 0 0 "Redemarrage....."
 /usr/local/bin/lcdbacklight $MAX_LUM
-./set-hostname zorgbox
 
 init 6
