@@ -123,6 +123,5 @@ echo "Finished parsing">>/var/log/minidlna.log
 [ -f /var/run/scan.run ] && rm /var/run/scan.run
 
 
-/usr/local/bin/zorgbox/logs.sh &> /var/log/logcompress
 
 echo "leds ends"

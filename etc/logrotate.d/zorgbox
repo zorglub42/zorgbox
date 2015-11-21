@@ -1,0 +1,73 @@
+compress
+
+/var/log/*.log  {
+    rotate 5
+    daily
+}
+
+/var/log/apache2/*  {
+    rotate 5
+    daily
+}
+
+/var/log/apt/*  {
+    rotate 5
+    daily
+}
+
+/var/log/fsck/*  {
+    rotate 5
+    daily
+}
+
+/var/log/ntpstats/*  {
+    rotate 5
+    daily
+}
+
+/var/log/samba/*  {
+    rotate 5
+    daily
+}
+
+
+/var/log/btmp  {
+    rotate 5
+    daily
+}
+
+/var/log/debug  {
+    rotate 5
+    daily
+}
+
+/var/log/error  {
+    rotate 5
+    daily
+}
+
+/var/log/logcompress  {
+    rotate 5
+    daily
+}
+
+/var/log/messages  {
+    rotate 5
+    daily
+}
+
+/var/log/runlevel  {
+    rotate 5
+    daily
+}
+
+/var/log/syslog  {
+    rotate 5
+    daily
+}
+
+/var/log/wtmp  {
+    rotate 5
+    daily
+}
+
