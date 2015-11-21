@@ -90,7 +90,7 @@
         <addonnotifications default="true">true</addonnotifications>
         <addonupdates default="true">0</addonupdates>
         <settinglevel>1</settinglevel>
-        <systemtotaluptime>3195</systemtotaluptime>
+        <systemtotaluptime>3259</systemtotaluptime>
     </general>
     <input>
         <enablejoystick default="true">true</enablejoystick>
@@ -275,7 +275,7 @@
         <airplayios8compat default="true">true</airplayios8compat>
         <airplaypassword default="true"></airplaypassword>
         <airplayvolumecontrol default="true">true</airplayvolumecontrol>
-        <devicename>Framboise314</devicename>
+        <devicename>framboise314</devicename>
         <esallinterfaces default="true">false</esallinterfaces>
         <escontinuousdelay default="true">25</escontinuousdelay>
         <esenabled default="true">true</esenabled>
@@ -546,6 +546,6 @@
     </viewstates>
     <audio>
         <mute>false</mute>
-        <fvolumelevel>0.400000</fvolumelevel>
+        <fvolumelevel>1.000000</fvolumelevel>
     </audio>
 </settings>
