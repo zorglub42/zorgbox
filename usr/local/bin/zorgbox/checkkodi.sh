@@ -3,7 +3,7 @@
  # Module Name : SysApps
  # Version : 1.0.0
  #
- # Software Name : ZorgBox
+ # Software Name : F314 MediaCenter
  # Version : 1.0
  #
  # Copyright (c) 2015 Zorglub42
@@ -11,7 +11,7 @@
  # <http://www.apache.org/licenses/LICENSE-2.0.html>
  #
  #--------------------------------------------------------
- # File Name   : /usr/local/bin/zorgbox/checkkodi.sh
+ # File Name   : /usr/local/bin/f314/checkkodi.sh
  #
  # Created     : 2015-11
  # Authors     : Zorglub42 <contact(at)zorglub42.fr>
@@ -120,6 +120,10 @@ function videoDisplayManager {
 	lcdclear
 	lcdbacklight $MAX_LUM
 	echo "Film=$Film"
+	#disable screen saver (if eventually running)
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "home" },"id": 1 }'
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "fullscreenvideo" },"id": 1 }'
+
 	videoDisplayTitleManager 
 	(
 		while [ 1 ] ; do
@@ -153,6 +157,8 @@ function killDisplayManager {
 		kill $pid
 	done
 	lcdclear; lcdbacklight 0
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "screensaver" },"id": 1 }'
+
 	DISP_PID=""
 }
 
@@ -252,7 +258,7 @@ tail -f /home/osmc/.kodi/temp/kodi.log|egrep --line-buffered  "Announcement:|INF
 				;;
 			esac
 		fi
-		echo $l | grep icy-name >/dev/null
+		echo $l | grep icy-name 
 		if [ $? -eq 0 ] ; then
 			Artist="Radio"
 			Album=""

@@ -88,6 +88,7 @@ cd -
 
 echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
 cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
+make clean
 make
 make install
 mv hostapd /usr/sbin/hostapd
