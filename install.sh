@@ -23,6 +23,7 @@
  # 1.0.0 - 2015-11-18 : Release of the file
  #
  
+CUR_DIR=`pwd`
 systemctl stop mediacenter	
 echo "$*" | grep -- "-nip" > /dev/null
 if [ $? -ne 0 ] ; then
@@ -45,8 +46,13 @@ fi
 
 echo ".gitignore" >.gitignore
 echo "install.log" >>.gitignore
+
+
+NEW=true
 if [ -f "install.log" ] ; then
+	NEW=false
 	echo "Removing previous files"
+	cp -r /etc/zorgbox $CUR_DIR/zorgbox.sav
 	update-rc.d checkkodi remove 
 	update-rc.d buttons remove 
 	update-rc.d leds remove 
@@ -55,7 +61,6 @@ if [ -f "install.log" ] ; then
 	while read -r f ; do
 		rm "$f"
 	done < install.log
-	cp -r /etc/zorgbox zorgbox.sav
 fi
 [ -f /var/www/html/index.html ] && rm /var/www/html/index.html
 ./snapshot.sh
@@ -96,12 +101,12 @@ if [ $? -ne 0 ] ; then
 	git clone git://git.drogon.net/wiringPi
 	cd wiringPi
 	./build
-	cd -
+	cd $CUR_DIR
 
 	echo 'Making ARMV6 compliant lcd utilites'
 	cd /usr/local/src/lcd-sparkfun
 	make clean; make install
-	cd -
+	cd $CUR_DIR
 
 	echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
 	cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
@@ -112,11 +117,12 @@ if [ $? -ne 0 ] ; then
 	chown root.root /usr/sbin/hostapd
 	chmod 755 /usr/sbin/hostapd	
 	chown www-data /etc/zorgbox/crendentails.json
-	cd -
+	cd $CUR_DIR
 fi
 
-if [ -d "zorgbox.sav" ] ; then
-	mv  zorgbox.sav /etc/zorgbox
+if [ -d "$CUR_DIR/zorgbox.sav" ] ; then
+	[ -d /etc/zorgbox ]  && rm -rf /etc/zorgbox
+	mv $CUR_DIR/zorgbox.sav /etc/zorgbox
 fi
 systemctl disable connman
 update-rc.d buttons defaults
@@ -131,7 +137,7 @@ echo samba user >> $$.tmp
 echo samba user >> $$.tmp
 echo samba user >> $$.tmp
 echo "" >> $$.tmp
- 
+  
 
 adduser -q guest --home=/home/public --shell=/bin/false --disabled-password<$$.tmp
 rm $$.tmp
@@ -139,7 +145,7 @@ rm $$.tmp
 chown -R osmc:osmc /home/osmc
 chown -R guest:osmc "/home/osmc/Carte SD Interne"
 
-passwd osmc
+[ "$NEW" == "true" ] && passwd osmc
 a2enmod rewrite proxy proxy_http
 
 

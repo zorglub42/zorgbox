@@ -27,7 +27,9 @@ echo "Snapshoting install"
 find . | sed 's/^\.//' \
 	   | sed 's/\/[^\/]*sh/EXCLUDE/' \
 	   | sed 's/\/\.git*/EXCLUDE/' \
-	   | sed 's/\/\boot*/EXCLUDE/' \
+	   | sed 's/^\/boot*/EXCLUDE/' \
+	   | sed 's/^\/zorgbox.sav*/EXCLUDE/' \
+	   | sed 's/^\/doc*/EXCLUDE/' \
 	   | sed 's/\/install.log/EXCLUDE/' \
 	   | sed 's/\/README.*/EXCLUDE/' \
 	   | sed 's/\/LICENSE/EXCLUDE/' \
