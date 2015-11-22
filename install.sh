@@ -71,7 +71,8 @@ else
 	cp boot/config.txt.PI2 /boot/config.txt
 fi
 
-if [ "$1" != "-nc" ] ; then
+echo "$*" | grep -- "-nc" > /dev/null
+if [ $? -ne 0 ] ; then
 	echo 'Making ARMV6 compliant wiringPI lib & tools'
 
 	cd /usr/local/src/
@@ -125,5 +126,11 @@ chown -R guest:osmc "/home/osmc/Carte SD Interne"
 passwd osmc
 a2enmod rewrite proxy proxy_http
 
-echo "Setting default configuration"
-/usr/local/bin/zorgbox/reset.sh
+
+echo "$*" | grep -- "-nr" > /dev/null
+if [ $? -ne 0 ] ; then
+	echo "Setting default configuration"
+	/usr/local/bin/zorgbox/reset.sh
+else
+	/usr/local/bin/zorgbox/apply-conf
+fi
