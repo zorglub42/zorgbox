@@ -94,6 +94,7 @@ if [ "$1" != "-nc" ] ; then
 	mv hostapd /usr/sbin/hostapd
 	chown root.root /usr/sbin/hostapd
 	chmod 755 /usr/sbin/hostapd	
+	chown www-data /etc/zorgbox/crendentails.json
 	cd -
 fi
 
