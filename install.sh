@@ -32,7 +32,7 @@ if [ $? -ne 0 ] ; then
 
 	apt-get update
 	apt-get -y upgrade
-	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc \
+	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc alsa-utils \
 					   libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl \
 					   liblog-message-simple-perl liblog-message-perl libobject-accessor-perl hostapd wvdial\
 					   rename libarchive-extract-perl libmodule-pluggable-perl libpod-latex-perl  libterm-ui-perl libtext-soundex-perl libcgi-pm-perl libmodule-build-perl \
@@ -40,6 +40,7 @@ if [ $? -ne 0 ] ; then
 					   libclass-c3-xs-perl syslog-ng syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp \
 					   build-essential dnsmasq dnsmasq-base libmnl0 libnetfilter-conntrack3 apache2 php5 wireless-tools ifmetric samba minidlna apt-transport-https ca-certificates rpimonitor
 fi
+
 
 
 echo ".gitignore" >.gitignore
@@ -64,6 +65,18 @@ cp -r etc /
 cp -r home /
 cp -r usr /
 cp -r var /
+
+
+aplay -l &> /tmp/$$.tmp
+CARD_COUNT=`cat /tmp/$$.tmp| egrep "^[a-z]* [0-9]*:"| wc -l`
+rm /tmp/$$.tmp
+
+AUDIO_DEVICE="ALSA:@:CARD=Device,DEV=0"
+if [ $CARD_COUNT -lt 1 ] ; then
+        AUDIO_DEVICE="PI:BOTH"
+
+fi
+cat home/osmc/.kodi/userdata/guisettings.xml| sed "s/\(.*<audiodevice>\).*\(<\/audiodevice>\)/\1$AUDIO_DEVICE\2/"> /home/osmc/.kodi/userdata/guisettings.xml
 
 
 uname -a | grep armv7l>/dev/null
@@ -137,4 +150,5 @@ if [ $? -ne 0 ] ; then
 else
 	/usr/local/bin/zorgbox/configure-interfaces
 	/usr/local/bin/zorgbox/configure-services
+	systemctl start mediacenter
 fi
