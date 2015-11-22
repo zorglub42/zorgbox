@@ -135,5 +135,6 @@ if [ $? -ne 0 ] ; then
 	echo "Setting default configuration"
 	/usr/local/bin/zorgbox/reset.sh
 else
-	/usr/local/bin/zorgbox/apply-conf
+	/usr/local/bin/zorgbox/configure-interfaces
+	/usr/local/bin/zorgbox/configure-services
 fi
