@@ -14,3 +14,4 @@ gpu_mem_256=112
 gpu_mem_512=144
 hdmi_drive=2
 hdmi_ignore_cec_init=1
+hdmi_force_hotplug=1
