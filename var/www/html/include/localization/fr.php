@@ -35,7 +35,7 @@ $strings["username.placeholder"]="Utilisateur";
 $strings["button.login"]="OK";
 
 $strings["menu.start-stop"]="Arrêter";
-$strings["menu.start-stop.desc"]="Arrêter proprement Framoise314 avant de le debrancher";
+$strings["menu.start-stop.desc"]="Arrêter proprement " . gethostname() . " avant de le debrancher ou le redémarrer";
 $strings["menu.health"]="Santé";
 $strings["menu.health.desc"]="Etat de santé de " . gethostname() . " (anglais)"	;
 $strings["menu.lcd-settings"]="Infos techniques";
@@ -74,6 +74,9 @@ $strings["wifi.hotspot.apn-pass"]="Mot de passe";
 $strings["system.settings.title"]="Paramètres de " . gethostname();
 $strings["system.settings.hostname"]="Nom du dispositif";
 $strings["system.settings.password"]="Mot de passe";
+$strings["system.settings.stop-mode"]="Arrêt ou redemarrage ?";
+$strings["system.settings.shutdown"]="Arrêter";
+$strings["system.settings.reboot"]="Redemarrer";
 
 
 

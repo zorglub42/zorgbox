@@ -62,7 +62,7 @@ $pass=getCurPass();
 					<hr>
 					<div class="col-md-4 col-xs-12">
 						<div class="panel panel-default">
-							<a 	class="list-group-item" href="health.php">
+							<a class="list-group-item" href="health.php">
 								<div class="row  menu-item">
 									<div class="col-md-4 col-xs-4"><img src="images/health.png" ></div>
 									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.health")?></h3></div>
@@ -76,7 +76,7 @@ $pass=getCurPass();
 					</div>
 					<div class="col-md-4 col-xs-12">
 						<div class="panel panel-default">
-							<a 	class="list-group-item" onclick="displayTechData()">
+							<a class="list-group-item" href="#"  onclick="displayTechData()">
 								<div class="row  menu-item">
 									<div class="col-md-4 col-xs-4"><img src="images/lcd-settings.png" ></div>
 									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.lcd-settings")?></h3></div>
@@ -90,7 +90,7 @@ $pass=getCurPass();
 					</div>
 					<div class="col-md-4 col-xs-12">
 						<div class="panel panel-default">
-							<a href="#" onclick="shutdown()" class="list-group-item">
+							<a href="#" onclick="chooseStop(this)" class="list-group-item">
 								<div class="row menu-item">
 									<div class="col-md-3 col-xs-4"><img src="images/power.png" ></div>
 									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.start-stop")?></h3></div>
@@ -121,6 +121,23 @@ $pass=getCurPass();
 </div>
 
 
+<div id="dialog" title="<?php echo Localization::getString("system.settings.stop-mode")?>" style="display:none">
+	<div class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<button type="button" class="btn btn-default" onclick="shutdown()">
+					<span><?php echo Localization::getString("system.settings.shutdown")?></span>
+				</button>
+				<button type="button" class="btn btn-default" onclick="reboot()">
+					<span><?php echo Localization::getString("system.settings.reboot")?></span>
+				</button>
+				<button type="button" class="btn btn-info" onclick="$('#dialog').dialog('close')">
+					<span><?php echo Localization::getString("button.cancel")?></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script>
 	function displayTechData(){
@@ -198,14 +215,31 @@ $pass=getCurPass();
 	}
 	function shutdown(){
 		
-		if (confirm('<?php echo Localization::getJSString("confirm.shutdown")?>')){
 			$.ajax({
 				  url: "system/status",  
 				  dataType: 'json',
 				  type:"POST",
-				  data: "mode=off",
+				  data: "mode=off"
 				});
-		}
+			$('#dialog').dialog('close');
+	}
+	function reboot(){
+		
+			$.ajax({
+				  url: "system/status",  
+				  dataType: 'json',
+				  type:"POST",
+				  data: "mode=restart",
+				});
+			$('#dialog').dialog('close');
+	}
+	
+	function chooseStop(button){
+			$("#dialog").dialog({
+					modal: true,
+					position: { my: "left top", at: "left top", of: button },
+					minWidth: 350
+				});
 	}
 
 </script>
