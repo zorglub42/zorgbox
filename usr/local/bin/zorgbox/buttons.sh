@@ -34,13 +34,31 @@ PATH=/usr/local/bin/:$PATH
 MAX_LUM=126
 
 
+displayTechData (){
+	getIP
+	top -bn2 -d 1 |head >/tmp/$$.cpu
+	RAM=`cat /tmp/$$.cpu| grep "KiB Mem"|tail -1|awk '{print ($5/$3)*100}'|sed 's/\(.*\...\).*/\1/'`
+	TEMP=`/opt/vc/bin/vcgencmd measure_temp|awk -F= '{print $2}'|sed 's/.C//'`
+
+	lcdclear
+	lcdbacklight $MAX_LUM
+	lcdprint 0 0 "T="$TEMP"c"
+	lcdprint 0 9 "C="$CPU"%"
+	lcdprint 1 0 "R="$RAM"%"
+	sleep 5
+	lcdclear
+	lcdbacklight 0
+
+}
+
+
 function displayIP () {
         if [ "$2" != "" ] ; then
                 lcdclear
                 lcdprint 0 0 $1
                 lcdprint 1 0 $2
                 lcdbacklight $MAX_LUM
-                sleep 10
+                sleep 5
                 lcdclear
                 lcdbacklight 0
         fi
@@ -118,7 +136,7 @@ while [ 1 ] ; do
 		D2=`date +%s`
 		DIFF=`expr $D2 - $D1`
 		if [ $DIFF -ge 2 ] ; then	
-			getIP
+			displayTechData
 		elif [ $SHUTDOWN -eq 0 ] ; then
 			lcdclear
 			lcdprint 0 0 "Arret...."
