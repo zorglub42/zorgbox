@@ -11,13 +11,13 @@
  # <http://www.apache.org/licenses/LICENSE-2.0.html>
  #
  #--------------------------------------------------------
- # File Name   : /usr/local/bin/zorgbox/shutdown
+ # File Name   : /usr/local/bin/zorgbox/display-tech-data
  #
  # Created     : 2015-11
  # Authors     : Zorglub42 <contact(at)zorglub42.fr>
  #
  # Description :
- #     Shutdown device (API Implem)
+ #     software lo,ng click on start-stop button
  #--------------------------------------------------------
  # History     :
  # 1.0.0 - 2015-11-18 : Release of the file
@@ -26,4 +26,4 @@
 UP_PIN=4
 
 gpio mode $UP_PIN output
-gpio write $UP_PIN 1; sleep 0.5;gpio write $UP_PIN 0
+gpio write $UP_PIN 1; sleep 3;gpio write $UP_PIN 0

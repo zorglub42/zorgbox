@@ -53,7 +53,7 @@ cat <<EOF > /etc/zorgbox/credentials.json
 [
     {
         "username": "admin",
-        "password": "zorgbox"
+        "password": "f314"
     }
 ]
 EOF
@@ -65,7 +65,7 @@ sleep 3
 /usr/local/bin/lcdbacklight $MAX_LUM
 displayWait &
 PID=$!
-./set-hostname zorgbox
+./set-hostname framboise314
 ./configure-hotspot "0123456789" "lo" "0000" "inconnu"  "inconnu"  "inconnu" 
 kill -9 $PID
 /usr/local/bin/lcdclear

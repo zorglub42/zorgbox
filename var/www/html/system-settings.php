@@ -28,8 +28,9 @@ $creds=json_decode(file_get_contents("/etc/zorgbox/credentials.json"), true);
 $pass=getCurPass();
 
 ?>
+
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title"><b><?php echo Localization::getString("system.settings.title")?></b></h3>
@@ -57,6 +58,51 @@ $pass=getCurPass();
 					</fieldset>
 
 				</form>
+				<div class="list-group">
+					<hr>
+					<div class="col-md-4 col-xs-12">
+						<div class="panel panel-default">
+							<a 	class="list-group-item" href="health.php">
+								<div class="row  menu-item">
+									<div class="col-md-4 col-xs-4"><img src="images/health.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.health")?></h3></div>
+									<div class="col-md-12">
+										<hr>
+										<?php echo Localization::getString("menu.health.desc")?>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-md-4 col-xs-12">
+						<div class="panel panel-default">
+							<a 	class="list-group-item" onclick="displayTechData()">
+								<div class="row  menu-item">
+									<div class="col-md-4 col-xs-4"><img src="images/lcd-settings.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.lcd-settings")?></h3></div>
+									<div class="col-md-12">
+										<hr>
+										<?php echo Localization::getString("menu.lcd-settings.desc")?>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-md-4 col-xs-12">
+						<div class="panel panel-default">
+							<a href="#" onclick="shutdown()" class="list-group-item">
+								<div class="row menu-item">
+									<div class="col-md-3 col-xs-4"><img src="images/power.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.start-stop")?></h3></div>
+									<div class="col-md-12">
+										<hr>
+										<?php echo Localization::getString("menu.start-stop.desc")?>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="panel-footer">
 					<div class="row">
@@ -77,6 +123,20 @@ $pass=getCurPass();
 
 
 <script>
+	function displayTechData(){
+		showWait();
+		$.ajax({
+			  url: "system/tech-data",  
+			  dataType: 'json',
+			  type:"POST",
+			  success: function(status){
+										hideWait();
+						},
+			  error: function(){
+								hideWait();
+					}
+			});
+	}
 	function changeSettings(){
 		showWait();
 		params="hostname=" + encodeURI($("#hostname").val());
@@ -135,6 +195,17 @@ $pass=getCurPass();
 								alert("Update password error");
 					}
 			});
+	}
+	function shutdown(){
+		
+		if (confirm('<?php echo Localization::getJSString("confirm.shutdown")?>')){
+			$.ajax({
+				  url: "system/status",  
+				  dataType: 'json',
+				  type:"POST",
+				  data: "mode=off",
+				});
+		}
 	}
 
 </script>

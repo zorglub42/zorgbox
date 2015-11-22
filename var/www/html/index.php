@@ -25,26 +25,12 @@
 include "include/header.php";
 ?>
 				<div class="list-group">
-					<div class="col-md-6 col-xs-12">
-						<div class="panel panel-default">
-							<a 	class="list-group-item" href="health.php">
-								<div class="row  menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/health.png" ></div>
-									<div class="col-md-8 col-xs-8 col-centered"><h3><?php echo Localization::getString("menu.health")?></h3></div>
-									<div class="col-md-12">
-										<hr>
-										<?php echo Localization::getString("menu.health.desc")?>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div>
-					<div class="col-md-6 col-xs-12">
+					<div class="col-md-4 col-xs-12">
 						<div class="panel panel-default">
 							<a href="wifi-mode.php" class="list-group-item">
 								<div class="row menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/wifi.png" ></div>
-									<div class="col-md-8 col-xs-8 col-centered"><h3><?php echo Localization::getString("menu.wifi")?></h3></div>
+									<div class="col-md-3 col-xs-4"><img src="images/wifi.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.wifi")?></h3></div>
 									<div class="col-md-12">
 										<hr>
 										<?php echo Localization::getString("menu.wifi.desc")?>
@@ -53,12 +39,12 @@ include "include/header.php";
 							</a>
 						</div>
 					</div>
-					<div class="col-md-6 col-xs-12">
+					<div class="col-md-4 col-xs-12">
 						<div class="panel panel-default">
 							<a href="system-settings.php" class="list-group-item">
 								<div class="row menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/settings.png" ></div>
-									<div class="col-md-8 col-xs-8 col-centered"><h3><?php echo Localization::getString("menu.settings")?></h3></div>
+									<div class="col-md-3 col-xs-4"><img src="images/settings.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.settings")?></h3></div>
 									<div class="col-md-12">
 										<hr>
 										<?php echo Localization::getString("menu.settings.desc")?>
@@ -67,26 +53,12 @@ include "include/header.php";
 							</a>
 						</div>
 					</div>
-					<div class="col-md-6 col-xs-12">
-						<div class="panel panel-default">
-							<a href="#" onclick="shutdown()" class="list-group-item">
-								<div class="row menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/power.png" ></div>
-									<div class="col-md-8 col-xs-8 col-centered"><h3><?php echo Localization::getString("menu.start-stop")?></h3></div>
-									<div class="col-md-12">
-										<hr>
-										<?php echo Localization::getString("menu.start-stop.desc")?>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div>
-					<div class="col-md-6 col-xs-12">
+					<div class="col-md-4 col-xs-12">
 						<div class="panel panel-default">
 							<a href="#" onclick="logout()" class="list-group-item">
 								<div class="row menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/logout.png" ></div>
-									<div class="col-md-8 col-xs-8 col-centered"><h3><?php echo Localization::getString("menu.logout")?></h3></div>
+									<div class="col-md-3 col-xs-4"><img src="images/logout.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.logout")?></h3></div>
 									<div class="col-md-12">
 										<hr>
 										<?php echo Localization::getString("menu.logout.desc")?>
@@ -108,17 +80,6 @@ include "include/header.php";
 														location="index.php";
 						});
 						
-					}
-					function shutdown(){
-						
-						if (confirm('<?php echo Localization::getJSString("confirm.shutdown")?>')){
-							$.ajax({
-								  url: "system/status",  
-								  dataType: 'json',
-								  type:"POST",
-								  data: "mode=off",
-								});
-						}
 					}
 				</script>
 <?php

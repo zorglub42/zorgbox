@@ -36,9 +36,11 @@ MAX_LUM=126
 
 displayTechData (){
 	getIP
-	top -bn2 -d 1 |head >/tmp/$$.cpu
-	RAM=`cat /tmp/$$.cpu| grep "KiB Mem"|tail -1|awk '{print ($5/$3)*100}'|sed 's/\(.*\...\).*/\1/'`
+	top -bn3 -d 1 >/tmp/$$.tmp
+        CPU=`cat /tmp/$$.tmp|grep Cpu|tail -1|sed 's/,[0-9]//g'|awk '{print  100 - $8}'` 
+	RAM=`cat /tmp/$$.tmp| grep "KiB Mem"|tail -1|awk '{print ($5/$3)*100}'|sed 's/\(.*\...\).*/\1/'`
 	TEMP=`/opt/vc/bin/vcgencmd measure_temp|awk -F= '{print $2}'|sed 's/.C//'`
+	rm /tmp/$$.tmp
 
 	lcdclear
 	lcdbacklight $MAX_LUM

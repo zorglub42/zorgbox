@@ -27,6 +27,14 @@ class System{
 	
 	/**
 	 * 
+	 * @url POST /tech-data
+	 */
+	 function displayTeckData(){
+		shell_exec("sudo /usr/local/bin/zorgbox/display-tech-data");
+		return Array("OK");
+	 }
+	/**
+	 * 
 	 * @url POST /status
 	 */
 	 function setStatus($mode){
