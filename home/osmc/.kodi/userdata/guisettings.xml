@@ -265,7 +265,7 @@
         <tvshowsdefault default="true">metadata.tvdb.com</tvshowsdefault>
     </scrapers>
     <screensaver>
-        <mode default="true">screensaver.xbmc.builtin.dim</mode>
+        <mode>screensaver.picture.slideshow</mode>
         <time default="true">3</time>
         <usedimonpause default="true">true</usedimonpause>
         <usemusicvisinstead default="true">true</usemusicvisinstead>
