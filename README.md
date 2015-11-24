@@ -45,7 +45,7 @@ By the end of the install process it will ask you for a brand new password for t
 
 After reboot you may find a wifi hotspot named "zorgbox", connect it (default pass-phrase is 0123456789)
 
-Then, with your browser go to [http://zorgbox](http://zorgbox) (or [http://192.168.200.1](http://192.168.200.1) or an access via WIFI or [http://192.168.100.1](http://192.168.100.1) to connect via ethernet) and login with admin/zorgbox to configure it
+Then, with your browser go to [http://zorgbox](http://zorgbox) (or [http://192.168.200.1](http://192.168.200.1) or an access via WIFI) and login with admin/zorgbox to configure it
 
 
 
