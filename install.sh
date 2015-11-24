@@ -27,21 +27,21 @@ systemctl stop mediacenter
 echo "$*" | grep -- "-nip" > /dev/null
 if [ $? -ne 0 ] ; then
 	git >/dev/null
-	if [ $? -eq 127 ] ; then
-		#git is not yet istalled
-		WITH_GIT=git-core
-	else
-		WITH_GIT=""
-	fi
 	echo "Installing required packages"
 	wget http://goo.gl/rsel0F -O /etc/apt/sources.list.d/rpimonitor.list
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
 
 	apt-get update
 	apt-get -y upgrade
+	if [ $? -eq 127 ] ; then
+		#git is not yet istalled
+		apt-get install git-core
+	fi
+	
+	
 	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc alsa-utils \
 					   libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl \
-					   $WITH_GIT liblog-message-simple-perl liblog-message-perl libobject-accessor-perl hostapd wvdial\
+					   liblog-message-simple-perl liblog-message-perl libobject-accessor-perl hostapd wvdial\
 					   rename libarchive-extract-perl libmodule-pluggable-perl libpod-latex-perl  libterm-ui-perl libtext-soundex-perl libcgi-pm-perl libmodule-build-perl \
 					   libpackage-constants-perl make-doc man-db groff libcgi-fast-perl libmodule-signature-perl libpod-readme-perl  libsoftware-license-perl \
 					   libclass-c3-xs-perl syslog-ng syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp \
