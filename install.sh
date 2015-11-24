@@ -116,7 +116,6 @@ if [ $? -ne 0 ] ; then
 	mv hostapd /usr/sbin/hostapd
 	chown root.root /usr/sbin/hostapd
 	chmod 755 /usr/sbin/hostapd	
-	chown www-data /etc/zorgbox/crendentails.json
 	cd $CUR_DIR
 fi
 
@@ -144,6 +143,7 @@ rm $$.tmp
 
 chown -R osmc:osmc /home/osmc
 chown -R guest:osmc "/home/osmc/Carte SD Interne"
+chown www-data /etc/zorgbox/credentails.json
 
 [ "$NEW" == "true" ] && passwd osmc
 a2enmod rewrite proxy proxy_http
