@@ -26,13 +26,14 @@
 systemctl stop mediacenter	
 echo "$*" | grep -- "-nip" > /dev/null
 if [ $? -ne 0 ] ; then
-	git >/dev/null
 	echo "Installing required packages"
 	wget http://goo.gl/rsel0F -O /etc/apt/sources.list.d/rpimonitor.list
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
 
 	apt-get update
 	apt-get -y upgrade
+
+	git >/dev/null
 	if [ $? -eq 127 ] ; then
 		#git is not yet istalled
 		apt-get install git-core
