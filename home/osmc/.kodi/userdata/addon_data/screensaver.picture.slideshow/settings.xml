@@ -1,0 +1,16 @@
+<settings>
+    <setting id="background" value="true" />
+    <setting id="cache" value="false" />
+    <setting id="create" value="" />
+    <setting id="date" value="false" />
+    <setting id="effect" value="2" />
+    <setting id="iptc" value="false" />
+    <setting id="label" value="0" />
+    <setting id="level" value="100" />
+    <setting id="music" value="false" />
+    <setting id="path" value="/home/osmc/Carte SD Interne/Photos/" />
+    <setting id="random" value="true" />
+    <setting id="scale" value="false" />
+    <setting id="time" value="10" />
+    <setting id="type" value="2" />
+</settings>
