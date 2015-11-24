@@ -39,8 +39,7 @@ ZorgBox is distributed as Apache2 free software license
 
 By the end of the install process it will ask you for a brand new password for the user osmc (security reason) and it will reboot.
 
-At this time UNPLUG THE ETHERNET CABLE if you are connected to a LAN with DHC server (entually plug it directly to your PC)
-
+*NOTE:* After install zorgbox is configured as WIFI Hotspot using ethernet in DHCP mode to connect default gateway
 
 
 
