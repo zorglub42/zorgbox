@@ -46,7 +46,8 @@ if [ $? -ne 0 ] ; then
 					   libpackage-constants-perl make-doc man-db groff libcgi-fast-perl libmodule-signature-perl libpod-readme-perl  libsoftware-license-perl \
 					   libclass-c3-xs-perl syslog-ng syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp \
 					   build-essential dnsmasq dnsmasq-base libmnl0 libnetfilter-conntrack3 apache2 php5 wireless-tools ifmetric samba minidlna apt-transport-https ca-certificates rpimonitor
-fi
+ 	/usr/share/rpimonitor/scripts/updatePackagesStatus.pl
+ fi
 
 if [ ! -d zorgbox -a ! -f install.sh ] ; then
 	git clone https://github.com/zorglub42/zorgbox
