@@ -32,6 +32,10 @@ ZorgBox is distributed as Apache2 free software license
   
 		cd zorgbox
 		./install
+
+- OR BETTER !!! All in one ! 
+		sudo -s ; cd ; curl https://raw.githubusercontent.com/zorglub42/zorgbox/master/install.sh|bash
+
 By the end of the install process it will ask you for a brand new password for the user osmc (security reason) and it will reboot.
 
 At this time UNPLUG THE ETHERNET CABLE if you are connected to a LAN with DHC server (entually plug it directly to your PC)
