@@ -156,5 +156,7 @@ if [ $? -ne 0 ] ; then
 else
 	/usr/local/bin/zorgbox/configure-interfaces
 	/usr/local/bin/zorgbox/configure-services
+	service checkkodi stop
 	systemctl start mediacenter
+	(sleep 10 && service checkkodi start) &
 fi
