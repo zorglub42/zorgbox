@@ -143,7 +143,7 @@ rm $$.tmp
 
 chown -R osmc:osmc /home/osmc
 chown -R guest:osmc "/home/osmc/Carte SD Interne"
-chown www-data /etc/zorgbox/credentails.json
+chown www-data /etc/zorgbox/credentials.json
 
 [ "$NEW" == "true" ] && passwd osmc
 a2enmod rewrite proxy proxy_http
