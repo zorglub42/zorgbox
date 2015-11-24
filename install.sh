@@ -27,18 +27,18 @@ systemctl stop mediacenter
 echo "$*" | grep -- "-nip" > /dev/null
 if [ $? -ne 0 ] ; then
 	echo "Installing required packages"
-	wget http://goo.gl/rsel0F -O /etc/apt/sources.list.d/rpimonitor.list
-	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
+	#wget http://goo.gl/rsel0F -O /etc/apt/sources.list.d/rpimonitor.list
+	#apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
 
-	apt-get update
-	apt-get -y upgrade
+	#apt-get update
+	#apt-get -y upgrade
 
-	git >/dev/null
+	git &>/dev/null
 	if [ $? -eq 127 ] ; then
 		#git is not yet istalled
 		apt-get install git-core
 	fi
-	
+	exit 666
 	
 	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc alsa-utils \
 					   libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl \
