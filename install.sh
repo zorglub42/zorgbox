@@ -22,11 +22,17 @@
  # History     :
  # 1.0.0 - 2015-11-18 : Release of the file
  #
- 
-CUR_DIR=`pwd`
+
 systemctl stop mediacenter	
 echo "$*" | grep -- "-nip" > /dev/null
 if [ $? -ne 0 ] ; then
+	git >/dev/null
+	if [ $? -eq 127 ] ; then
+		#git is not yet istalled
+		WITH_GIT=git-core
+	else
+		WITH_GIT=""
+	fi
 	echo "Installing required packages"
 	wget http://goo.gl/rsel0F -O /etc/apt/sources.list.d/rpimonitor.list
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
@@ -35,15 +41,21 @@ if [ $? -ne 0 ] ; then
 	apt-get -y upgrade
 	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc alsa-utils \
 					   libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl \
-					   liblog-message-simple-perl liblog-message-perl libobject-accessor-perl hostapd wvdial\
+					   $WITH_GIT liblog-message-simple-perl liblog-message-perl libobject-accessor-perl hostapd wvdial\
 					   rename libarchive-extract-perl libmodule-pluggable-perl libpod-latex-perl  libterm-ui-perl libtext-soundex-perl libcgi-pm-perl libmodule-build-perl \
 					   libpackage-constants-perl make-doc man-db groff libcgi-fast-perl libmodule-signature-perl libpod-readme-perl  libsoftware-license-perl \
 					   libclass-c3-xs-perl syslog-ng syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp \
 					   build-essential dnsmasq dnsmasq-base libmnl0 libnetfilter-conntrack3 apache2 php5 wireless-tools ifmetric samba minidlna apt-transport-https ca-certificates rpimonitor
 fi
 
+if [ ! -d zorgbox -a ! -f install.sh ] ; then
+	git clone https://github.com/zorglub42/zorgbox
+	cd zorgbox
+else
+	git pull
+fi
 
-
+CUR_DIR=`pwd`
 echo ".gitignore" >.gitignore
 echo "install.log" >>.gitignore
 
