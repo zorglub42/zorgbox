@@ -1,0 +1,59 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          start-stop-notifier
+# Required-Start:   $all 
+# Required-Stop:	
+# Should-Start:      
+# Should-Stop:       
+# Default-Start:     S 2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Display OS start  or stop on LCD
+# Description:       Display OS start  or stop on LCD
+
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+. /lib/lsb/init-functions
+
+NAME=start-stop
+DAEMON=/usr/local/bin/zorgbox/start-stop-notifier.sh
+DESC="Display OS start  or stop on LCD"
+DAEMON_ARGS=""
+PIDFILE=/var/run/$NAME.pid
+
+test -x $DAEMON || exit 5
+
+if [ -f /etc/default/$NAME ] ; then
+    . /etc/default/$NAME
+fi
+
+case "$1" in
+
+    start)
+	    log_daemon_msg "Starting $DESC" "$NAME"
+	    start-stop-daemon --start --quiet --pidfile $PIDFILE \
+    	    --background --make-pidfile --startas $DAEMON -- $DAEMON_ARGS
+        log_end_msg $?
+    	;;
+    stop)
+    	log_daemon_msg "Stopping $DESC" "$NAME ($DAEMON $DAEMON_ARGS)"
+	echo $1 >> /var/run/start-stop-notifier.log
+	sleep 1
+	echo $1 >> /var/run/start-stop-notifier.log
+        log_end_msg $?
+    	rm -f $PIDFILE
+	    ;;
+    status)
+        status_of_proc -p $PIDFILE $DAEMON $NAME
+        ;;
+    restart|reload|force-reload)
+        $0 stop && sleep 2 && $0 start
+	    ;;
+    *)
+    	echo "Usage: $0 {start|stop|status|restart|reload|force-reload}" >&2
+	    exit 2
+    	;;
+esac
+

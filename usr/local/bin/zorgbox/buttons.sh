@@ -121,10 +121,9 @@ function displayWait {
 
 SHUTDOWN=0
 
-lcdclear
-lcdclear
-lcdprint 0 0 Demarrage.....
-lcdbacklight $MAX_LUM
+#lcdclear
+#lcdprint 0 0 Demarrage.....
+#lcdbacklight $MAX_LUM
 
 while [ 1 ] ; do
 	BUTT=`/usr/local/bin/gpio read $UP_PIN`

@@ -58,6 +58,7 @@ if [ -f "install.log" ] ; then
 	update-rc.d leds remove 
 	update-rc.d checkmount remove 
 	update-rc.d wvdial remove 
+	update-rc.d start-stop-notifier remove 
 	while read -r f ; do
 		rm "$f"
 	done < install.log
@@ -125,6 +126,7 @@ if [ -d "$CUR_DIR/zorgbox.sav" ] ; then
 	mv $CUR_DIR/zorgbox.sav /etc/zorgbox
 fi
 systemctl disable connman
+update-rc.d start-stop-notifier defaults
 update-rc.d buttons defaults
 update-rc.d checkkodi defaults 
 update-rc.d checkmount defaults 

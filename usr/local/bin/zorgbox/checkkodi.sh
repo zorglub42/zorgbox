@@ -198,21 +198,25 @@ function displayMode {
 
 (
 	DISP_PID=""
-	killDisplayManager
-	lcdbacklight $MAX_LUM
-	lcdprint 0 0 `hostname`
-	displayWait 
+	#killDisplayManager
+	#lcdbacklight $MAX_LUM
+	#lcdprint 0 0 `hostname`
+	#displayWait 
 	
 	echo "Check kodi playing checker starts"
 	date
 	echo "Waitting for kodi"
-	ps aux | grep "/usr/lib/kodi/kodi.bin"| grep -v grep >/dev/null
-	while [ $? -ne 0 ] ; do
-		ps aux | grep "/usr/lib/kodi/kodi.bin"| grep -v grep >/dev/null
-		sleep 5
+	KODI=1
+
+	while [ $KODI -ne 0 ] ; do
+
+			sleep 1
+			grep "OSMC ADDON MAIN daemon started" /home/osmc/.kodi/temp/kodi.log>/dev/null
+			KODI=$?
+
 	done
+
 	date
-	killDisplayManager
 ) >/var/log/checkkodi.log
 
 curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "screensaver" },"id": 1 }'
