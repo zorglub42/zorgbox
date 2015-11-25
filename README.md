@@ -32,16 +32,20 @@ ZorgBox is distributed as Apache2 free software license
   
 		cd zorgbox
 		./install
+
+- OR BETTER !!! All in one ! 
+
+		sudo bash -c "cd ; wget https://raw.githubusercontent.com/zorglub42/zorgbox/master/install.sh; bash install.sh;rm install.sh"
+
 By the end of the install process it will ask you for a brand new password for the user osmc (security reason) and it will reboot.
 
-At this time UNPLUG THE ETHERNET CABLE if you are connected to a LAN with DHC server (entually plug it directly to your PC)
-
+**NOTE:** After install zorgbox is configured as WIFI Hotspot using ethernet in DHCP mode to connect default gateway
 
 
 
 After reboot you may find a wifi hotspot named "zorgbox", connect it (default pass-phrase is 0123456789)
 
-Then, with your browser go to [http://zorgbox](http://zorgbox) (or [http://192.168.200.1](http://192.168.200.1) or an access via WIFI or [http://192.168.100.1](http://192.168.100.1) to connect via ethernet) and login with admin/zorgbox to configure it
+Then, with your browser go to [http://zorgbox](http://zorgbox) (or [http://192.168.200.1](http://192.168.200.1) or an access via WIFI) and login with admin/zorgbox to configure it
 
 
 

@@ -22,8 +22,7 @@
  # History     :
  # 1.0.0 - 2015-11-18 : Release of the file
  #
- 
-CUR_DIR=`pwd`
+
 systemctl stop mediacenter	
 echo "$*" | grep -- "-nip" > /dev/null
 if [ $? -ne 0 ] ; then
@@ -33,6 +32,13 @@ if [ $? -ne 0 ] ; then
 
 	apt-get update
 	apt-get -y upgrade
+
+	git &>/dev/null
+	if [ $? -eq 127 ] ; then
+		#git is not yet istalled
+		apt-get install git-core
+	fi
+
 	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc alsa-utils \
 					   libterm-readline-gnu-perl libterm-readline-perl-perl make libb-lint-perl libcpanplus-dist-build-perl libcpanplus-perl libfile-checktree-perl \
 					   liblog-message-simple-perl liblog-message-perl libobject-accessor-perl hostapd wvdial\
@@ -40,10 +46,17 @@ if [ $? -ne 0 ] ; then
 					   libpackage-constants-perl make-doc man-db groff libcgi-fast-perl libmodule-signature-perl libpod-readme-perl  libsoftware-license-perl \
 					   libclass-c3-xs-perl syslog-ng syslog-ng-mod-smtp syslog-ng-mod-amqp syslog-ng-mod-geoip syslog-ng-mod-redis syslog-ng-mod-stomp \
 					   build-essential dnsmasq dnsmasq-base libmnl0 libnetfilter-conntrack3 apache2 php5 wireless-tools ifmetric samba minidlna apt-transport-https ca-certificates rpimonitor
+ 	/usr/share/rpimonitor/scripts/updatePackagesStatus.pl
+ fi
+
+if [ ! -d zorgbox -a ! -f install.sh ] ; then
+	git clone https://github.com/zorglub42/zorgbox
+	cd zorgbox
+else
+	git pull
 fi
 
-
-
+CUR_DIR=`pwd`
 echo ".gitignore" >.gitignore
 echo "install.log" >>.gitignore
 
@@ -117,7 +130,6 @@ if [ $? -ne 0 ] ; then
 	mv hostapd /usr/sbin/hostapd
 	chown root.root /usr/sbin/hostapd
 	chmod 755 /usr/sbin/hostapd	
-	chown www-data /etc/zorgbox/crendentails.json
 	cd $CUR_DIR
 fi
 
@@ -146,6 +158,7 @@ rm $$.tmp
 
 chown -R osmc:osmc /home/osmc
 chown -R guest:osmc "/home/osmc/Carte SD Interne"
+chown www-data /etc/zorgbox/credentials.json
 
 [ "$NEW" == "true" ] && passwd osmc
 a2enmod rewrite proxy proxy_http
