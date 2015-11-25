@@ -93,25 +93,6 @@ done)
 
 }
 
-function displayWait {
-        lcdprint 1 0 '----------------'
-        DELAY=0.2
-        PREV=1
-        POS=0
-        STEP='+'
-        while [ 1 ] ; do
-                lcdprint 1 $PREV '-'
-                lcdprint 1 $POS '*'
-                PREV=$POS
-                if [ $POS -eq 15 ] ; then
-                        STEP='-'
-                elif [ $POS -eq 0 ] ; then
-                        STEP='+'
-                fi
-                POS=`expr $POS $STEP 1`
-                sleep $DELAY
-        done
-}
 
 /usr/local/bin/gpio mode $RELAY_PIN out
 /usr/local/bin/gpio mode $UP_PIN in
@@ -139,10 +120,6 @@ while [ 1 ] ; do
 		if [ $DIFF -ge 2 ] ; then	
 			displayTechData
 		elif [ $SHUTDOWN -eq 0 ] ; then
-			lcdclear
-			lcdprint 0 0 "Arret...."
-			lcdbacklight $MAX_LUM
-			displayWait &
 			SHUTDONW=1
 			init 0
 		fi
