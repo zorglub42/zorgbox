@@ -118,6 +118,11 @@ function videoDisplayManager {
 		return
 	fi
 
+	#disable screen saver (if eventually running)
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "Input.Back", "id": 1 }'>/dev/null
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "home" },"id": 1 }'
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "fullscreenvideo" },"id": 1 }'
+
 	lcdclear
 	lcdbacklight $MAX_LUM
 	echo "Film=$Film"
@@ -161,8 +166,6 @@ function killDisplayManager {
 
 
 function checkIfVideo {
-	#disable screen saver (if eventually running)
-	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "fullscreenvideo" },"id": 1 }'
 	if [ "$Film" == "" ] ; then
 		curl -s --header 'Content-Type: application/json' --data-binary '{ "id": 1, "jsonrpc": "2.0", "method": "Player.GetActivePlayers" }' 'http://127.0.0.1:88/jsonrpc'| grep '"type":"video"'>/dev/null
 		if [ $? -eq 0 ] ; then
@@ -189,6 +192,10 @@ function displayMode {
 				audioDisplayManager 
 			;;
 			picture)
+
+				#disable screen saver (if eventually running)
+				curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "Input.Back", "id": 1 }'>/dev/null
+				curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "home" },"id": 1 }'
 				curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "slideshow" },"id": 1 }'
 			;;
 		esac
@@ -274,6 +281,7 @@ tail -f /home/osmc/.kodi/temp/kodi.log|egrep --line-buffered  "Announcement:|INF
 		fi
 	done
 	#displayMode "off"	
+	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "Input.Back", "id": 1 }'>/dev/null
 	curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "home" },"id": 1 }'
 	echo end
 	ps aux | grep checkkodi.sh| grep -v grep | awk '{print $1}' |xargs kill 
