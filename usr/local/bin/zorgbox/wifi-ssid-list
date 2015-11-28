@@ -34,7 +34,7 @@ echo '['
 while read -r l ; do
 
         ssid=`echo $l|awk -F '"' '{print $2}'`
-        quality=`echo $l|sed 's/.*Quality.\([0-9]*\).*/\1/'`
+        quality=`echo $l|sed 's/.*Signal level.\([0-9]*\).*/\1/'`
 		if [ "$ssid" != "" ] ; then
 			if [ $quality -lt 20 ] ; then
 					quality=1

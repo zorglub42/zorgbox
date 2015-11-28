@@ -23,6 +23,7 @@
  * 1.0.0 - 2015-11-18 : Release of the file
 */
 require_once "../include/Localization.php";
+require_once "../include/utils.php";
 class Wifi{
 	
 	/**
@@ -30,19 +31,22 @@ class Wifi{
 	 * @url GET /ssid
 	 */
 	 function getSSID(){
-		 $ssids=json_decode( shell_exec("sudo /usr/local/bin/zorgbox/wifi-ssid-list"));
-		 return $ssids;
+		restCheckAuth();
+		$ssids=json_decode( shell_exec("sudo /usr/local/bin/zorgbox/wifi-ssid-list"));
+		return $ssids;
 	 }
 	/**
 	 * 
 	 * @url POST /client
+	 * @url GET /client
 	 */
 	 function setClientParameters($ssid, $pass, $mode=""){
-		 $res=json_decode( shell_exec("sudo /usr/local/bin/zorgbox/configure-wifi-client \"$ssid\" \"$pass\" \"$mode\""), true);
-		 if ($res["connected"] == 0){
-			 throw new RestException(400,  Localization::getJSString("wifi.client.bad-creds"));
-		 }
-		 return $res;
+		restCheckAuth();
+		$res=json_decode( shell_exec("sudo /usr/local/bin/zorgbox/configure-wifi-client \"$ssid\" \"$pass\" \"$mode\""), true);
+		if ($res["connected"] == 0){
+		 throw new RestException(400,  Localization::getJSString("wifi.client.bad-creds"));
+		}
+		return $res;
 	 }
 	/**
 	 * 
@@ -50,14 +54,16 @@ class Wifi{
 	 * @url GET /hotspot
 	 */
 	 function setHotspotParameters($pass, $gw, $ethMode, $pin, $apn, $apnUser, $apnPass){
-		 if ($gw == "ppp0" && $ethMode=="hotspot"){
-			 $if2="eth0";
-		 }else{
-			 $if2="";
-		 }
-		 $res=shell_exec("sudo /usr/local/bin/zorgbox/configure-hotspot \"$pass\" \"$gw\" \"$pin\" \"$apn\"  \"$apnUser\"  \"$apnPass\" \"$if2\"");
-		 return Array("rc"=>"$res");
+		restCheckAuth();
+		if ($gw == "ppp0" && $ethMode=="hotspot"){
+		 $if2="eth0";
+		}else{
+		 $if2="";
+		}
+		$res=shell_exec("sudo /usr/local/bin/zorgbox/configure-hotspot \"$pass\" \"$gw\" \"$pin\" \"$apn\"  \"$apnUser\"  \"$apnPass\" \"$if2\"");
+		return Array("rc"=>"$res");
 	 }
+	 
 	
 }
 ?>

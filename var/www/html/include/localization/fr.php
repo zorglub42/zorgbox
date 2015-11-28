@@ -34,6 +34,8 @@ $strings["username.placeholder"]="Utilisateur";
 
 $strings["button.login"]="OK";
 
+$strings["menu.kodi"]="Kodi";
+$strings["menu.kodi.desc"]="Afficher/Cacher l'interface native de Kodi";
 $strings["menu.start-stop"]="Arrêter";
 $strings["menu.start-stop.desc"]="Arrêter proprement " . gethostname() . " avant de le debrancher ou le redémarrer";
 $strings["menu.health"]="Santé";
@@ -55,6 +57,7 @@ $strings["menu.wifi.hotspot.desc"]="Définir les paramètres pour transformer ".
 $strings["wifi.client.title"]="Se raccorder au WIFI";
 $strings["wifi.client.ssid"]="Nom (SSID)";
 $strings["wifi.client.passphrase"]="Mot de passe";
+$strings["wifi.client.bridge"]="Ethernet mode \"bridge\"";
 $strings["wifi.client.bad-creds"]="Impossible de ce connecter a ce réseau";
 
 $strings["wifi.hotspot.title"]="Caractéristiques du point d'accès";

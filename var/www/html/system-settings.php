@@ -60,11 +60,11 @@ $pass=getCurPass();
 				</form>
 				<div class="list-group">
 					<hr>
-					<div class="col-md-4 col-xs-12">
+					<div class="col-md-3 col-xs-12">
 						<div class="panel panel-default">
 							<a class="list-group-item" href="health.php">
 								<div class="row  menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/health.png" ></div>
+									<div class="col-md-3 col-xs-4"><img src="images/health.png" ></div>
 									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.health")?></h3></div>
 									<div class="col-md-12">
 										<hr>
@@ -74,11 +74,11 @@ $pass=getCurPass();
 							</a>
 						</div>
 					</div>
-					<div class="col-md-4 col-xs-12">
+					<div class="col-md-3 col-xs-12">
 						<div class="panel panel-default">
 							<a class="list-group-item" href="#"  onclick="displayTechData()">
 								<div class="row  menu-item">
-									<div class="col-md-4 col-xs-4"><img src="images/lcd-settings.png" ></div>
+									<div class="col-md-3 col-xs-4"><img src="images/lcd-settings.png" ></div>
 									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.lcd-settings")?></h3></div>
 									<div class="col-md-12">
 										<hr>
@@ -88,7 +88,21 @@ $pass=getCurPass();
 							</a>
 						</div>
 					</div>
-					<div class="col-md-4 col-xs-12">
+					<div class="col-md-3 col-xs-12">
+						<div class="panel panel-default">
+							<a href="#" onclick="toggleKodi()" class="list-group-item">
+								<div class="row menu-item">
+									<div class="col-md-3 col-xs-4"><img src="images/kodi.png" ></div>
+									<div class="col-md-8 col-xs-8"><h3>&nbsp;&nbsp;<?php echo Localization::getString("menu.kodi")?></h3></div>
+									<div class="col-md-12">
+										<hr>
+										<?php echo Localization::getString("menu.kodi.desc")?>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-md-3 col-xs-12">
 						<div class="panel panel-default">
 							<a href="#" onclick="chooseStop(this)" class="list-group-item">
 								<div class="row menu-item">
@@ -240,6 +254,13 @@ $pass=getCurPass();
 					position: { my: "left top", at: "left top", of: button },
 					minWidth: 350
 				});
+	}
+	function toggleKodi(){
+		$.ajax({
+			  url: "kodi/visibility/toggle",  
+			  dataType: 'json',
+			  type:"POST",
+			});
 	}
 
 </script>

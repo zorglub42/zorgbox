@@ -1,0 +1,112 @@
+#!/bin/bash
+ #--------------------------------------------------------
+ # Module Name : SysApps
+ # Version : 1.0.0
+ #
+ # Software Name : ZorgBox
+ # Version : 1.0
+ #
+ # Copyright (c) 2015 Zorglub42
+ # This software is distributed under the Apache 2 license
+ # <http://www.apache.org/licenses/LICENSE-2.0.html>
+ #
+ #--------------------------------------------------------
+ # File Name   : /usr/local/bin/zorgbox/checkkodi-mngr
+ #
+ # Created     : 2015-11
+ # Authors     : Zorglub42 <contact(at)zorglub42.fr>
+ #
+ # Description :
+ #     kodi GUI management
+ #--------------------------------------------------------
+ # History     :
+ # 1.0.0 - 2015-11-18 : Release of the file
+ #
+# 
+
+function getCurrentPlayer () {
+	curl -s --header 'Content-Type: application/json' --data-binary '{ "id": 1, "jsonrpc": "2.0", "method": "Player.GetActivePlayers" }' 'http://127.0.0.1:88/jsonrpc'|awk -F '"' '{print $14}'
+}
+
+function visibility-status() {
+		curl -s --header 'Content-Type: application/json' --data-binary '{"jsonrpc": "2.0", "method": "XBMC.GetInfoBooleans", "params": { "booleans": ["Window.IsActive(screensaver) "] }, "id": 1}' 'http://127.0.0.1:88/jsonrpc'| grep '":true'>/dev/null
+		if [ $? -eq 0 ] ; then
+			echo 0
+		else
+			PLAYER=`getCurrentPlayer`
+			if [ "$PLAYER" == "" ] ; then
+				echo 1
+			else
+				case $PLAYER in
+					video)
+						curl -s --header 'Content-Type: application/json' --data-binary '{"jsonrpc": "2.0", "method": "XBMC.GetInfoBooleans", "params": { "booleans": ["Window.IsActive(fullscreenvideo) "] }, "id": 1}' 'http://127.0.0.1:88/jsonrpc'| grep '":true' >/dev/null
+						if [ $? -eq 0 ] ; then
+							echo 0
+						else
+							echo 1
+						fi
+					;;
+					audio)
+						curl -s --header 'Content-Type: application/json' --data-binary '{"jsonrpc": "2.0", "method": "XBMC.GetInfoBooleans", "params": { "booleans": ["Window.IsActive(screensaver) "] }, "id": 1}' 'http://127.0.0.1:88/jsonrpc'| grep '":true' >/dev/null
+						if [ $? -eq 0 ] ; then
+							echo 0
+						else
+							echo 1
+						fi
+					;;
+					picture)
+						curl -s --header 'Content-Type: application/json' --data-binary '{"jsonrpc": "2.0", "method": "XBMC.GetInfoBooleans", "params": { "booleans": ["Window.IsActive(slideshow) "] }, "id": 1}' 'http://127.0.0.1:88/jsonrpc'| grep '":true' >/dev/null
+						if [ $? -eq 0 ] ; then
+							echo 0
+						else
+							echo 1
+						fi
+					;;
+				esac
+			fi
+		fi
+}
+
+case $1 in
+	visibility-status)
+		visibility-status
+	;;
+	show)
+		CUR_VIS=`visibility-status`
+		if [ $CUR_VIS -eq 0 ] ; then
+			curl -s --header 'Content-Type: application/json' --data-binary '{"jsonrpc": "2.0", "method": "XBMC.GetInfoBooleans", "params": { "booleans": ["System.ScreenSaverActive "] }, "id": 1}' 'http://127.0.0.1:88/jsonrpc'| grep '"System.ScreenSaverActive ":true'>/dev/null
+			if [ $? -eq 0 ] ; then
+				curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "Input.Back", "id": 1 }'>/dev/null
+			fi
+			curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "home" },"id": 1 }'>/dev/null
+		fi
+		visibility-status
+	;;
+	hide)
+		CUR_VIS=`visibility-status`
+		if [ $CUR_VIS -eq 1 ] ; then
+			PLAYER=`getCurrentPlayer`
+			case $PLAYER in
+				video)
+					curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "fullscreenvideo" },"id": 1 }'>/dev/null
+				;;
+				picture)
+					curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "slideshow" },"id": 1 }'>/dev/null
+				;;
+				*)
+					curl -s 'http://127.0.0.1:88/jsonrpc?Player.GetProperties'  -H 'Content-Type: application/json' --data-binary '{ "jsonrpc": "2.0", "method": "GUI.ActivateWindow", "params": { "window": "screensaver" },"id": 1 }'>/dev/null
+				;;
+
+			esac
+		fi
+		visibility-status
+	;;
+	player)
+		getCurrentPlayer
+	;;
+esac
+		
+#service checkkodi $1
+#if [ "$1" == "stop" ] ; then
+#	echo "OSMC ADDON MAIN daemon started">> /home/osmc/.kodi/temp/kodi.log
+#fi

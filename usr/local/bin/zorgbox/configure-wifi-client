@@ -26,18 +26,21 @@
 cd `dirname $0`
 
 if [ $# -lt 2 ] ; then
-	echo usage $0 ssid pass [test]
+	echo usage $0 ssid pass [hotspot]
 	exit 1
 fi
-[ "$3" == "test"  -a -f /etc/wpa_supplicant/wpa_supplicant.conf ] && cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.sav
-[ "$3" == "test"  -a -f /etc/network/interfaces ] && cp /etc/network/interfaces /etc/network/interfaces.sav
 cat /etc/wpa_supplicant/wpa_supplicant.conf|sed "s/\(.*ssid=\"\).*\"/\1$1\"/"|sed "s/\(.*psk=\"\).*\"/\1$2\"/">/tmp/$$.log
 mv /tmp/$$.log /etc/wpa_supplicant/wpa_supplicant.conf
 
-
+eth0Mode="client"
+if [ "$3" == "hotspot" ] ; then
+	eth0Mode="hotspot"
+fi
 cat /etc/zorgbox/network.json |sed 's/\(.*"wlan0Mode": "\).*\(",\).*/\1client\2/'>>/tmp/$$.json
-cat /tmp/$$.json |sed 's/\(.*"eth0Mode": "\).*\(",\).*/\1client\2/'>>/tmp/$$.json1
+cat /tmp/$$.json |sed 's/\(.*\"eth0Mode": "\).*\(",\).*/\1'$eth0Mode'\2/'>>/tmp/$$.json1
 mv /tmp/$$.json1 /tmp/$$.json
+
+
 ./configure-interfaces /tmp/$$.json
 
 
@@ -59,11 +62,8 @@ fi
 echo '{'
 echo '   "connected": '$rc
 echo '}'
-[ "$3" == "test" -a -f /etc/wpa_supplicant/wpa_supplicant.conf.sav ] && mv /etc/wpa_supplicant/wpa_supplicant.conf.sav /etc/wpa_supplicant/wpa_supplicant.conf 
-[ "$3" == "test"  -a -f /etc/network/interfaces.sav ] && cp /etc/network/interfaces.sav /etc/network/interfaces
 
 if [ $rc -eq 1 ] ; then
-	if [ "$3" == "" ] ; then
 		
 		grep '"wlan0Mode": "hotspot"' /etc/zorgbox/network.json >/dev/null
 		if [ $? -eq 0 ] ; then
@@ -73,16 +73,8 @@ if [ $rc -eq 1 ] ; then
 			./configure-services &>> /var/log/zorgbox.log
 
 		fi
+		(ifdown --force eth0 &>> /var/log/zorgbox.log
+		ifup --force eth0 &>> /var/log/zorgbox.log) &
 		cp /tmp/$$.json /etc/zorgbox/network.json
-	else
-			grep '"wlan0Mode": "hotspot"' /etc/zorgbox/network.json >/dev/null
-			if [ $? -eq 0 ] ; then
-
-			./configure-interfaces
-			ifdown --force wlan 0 &>> /var/log/zorgbox.log
-			ifup --force wlan0 &>> /var/log/zorgbox.log
-			service hostapd restart &>> /var/log/zorgbox.log
-		fi
-	fi
 fi
 rm /tmp/$$.*

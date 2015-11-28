@@ -31,10 +31,15 @@ HOSTAPD_ACTION=stop
 DNSMASQ_ACTION=stop
 grep '"hotspot"' /etc/zorgbox/network.json > /dev/null
 if [ $? -eq 0 ] ; then
-	update-rc.d hostapd enable
 	update-rc.d dnsmasq enable
 	DNSMASQ_ACTION=restart
-	HOSTAPD_ACTION=restart
+
+	grep '"wlan0Mode": "hotspot"' /etc/zorgbox/network.json >/dev/null
+	if [ $? -eq 0 ] ; then 
+	
+		update-rc.d hostapd enable
+		HOSTAPD_ACTION=restart
+	fi
 	grep '"ppp0"' /etc/zorgbox/network.json > /dev/null
 	if [ $? -eq 0 ] ; then
 		cat /etc/default/wvdial | sed 's/ENABLE_WVDIAL_DAEMON=.*/ENABLE_WVDIAL_DAEMON=true/'>/tmp/$$.conf

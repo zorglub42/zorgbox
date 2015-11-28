@@ -22,6 +22,13 @@
  * History     :
  * 1.0.0 - 2015-11-18 : Release of the file
 */include "include/header.php";
+$settings=json_decode(file_get_contents("/etc/zorgbox/network.json"), true);
+if ($settings["eth0Mode"]=="hotspot"){
+	$ethHotspot="true";
+}else{
+	$ethHotspot="false";
+}
+
 ?>
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
@@ -70,6 +77,16 @@
 					<div class="form-group">
 						<input type="password" id="passphrase" class="form-control">
 					</div>
+					<div class="form-group">
+						<div class="col-md-12">
+							<div class="input-group">
+								  <span class="input-group-addon">
+									<input type="checkbox" id="cbBridge">
+								  </span>
+								  <label for="cbBridge" class="form-control"><?php echo Localization::getString("wifi.client.bridge")?></label>
+							</div>
+						</div>
+					</div>
 				</fieldset>
 			</form>
 			<div class="panel-footer">
@@ -98,7 +115,12 @@
 				showWait();
 				wifi_pass=document.getElementById("passphrase").value;
 
-				params="ssid=" + encodeURI(wifi_ssid) + "&pass=" + encodeURI(wifi_pass	);
+				if ($('#cbBridge').prop('checked')){
+					bridge="hotspot"
+				}else{
+					bridge=""
+				}
+				params="ssid=" + encodeURI(wifi_ssid) + "&pass=" + encodeURI(wifi_pass	)+ "&mode=" + encodeURI(bridge);
 				$.ajax({
 					  url: "/wifi/client",  
 					  dataType: 'json',
@@ -145,6 +167,7 @@
 			}
 		}
 		startLoadSSIDs();
+		$('#cbBridge').prop('checked', <?php echo $ethHotspot ?>);
 </script>
 <?php
 include "include/footer.php";

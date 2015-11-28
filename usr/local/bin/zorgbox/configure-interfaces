@@ -33,7 +33,7 @@ else
 fi
 
 cp $CONF_DIR/interfaces.base /etc/network/interfaces
-:>/etc/dnsmasq.d/hotspot.conf
+:>/etc/dnsmasq.d/zorgbox.conf
 
 iptables -F
 iptables -X
@@ -50,7 +50,7 @@ if [ $? -eq 0 ] ; then
 	EXCLUDE_IF=eth0
 else
 	cat $CONF_DIR/interfaces.eth0.hotspot  >>/etc/network/interfaces
-	cat $CONF_DIR/hotspot.conf.eth0 >>/etc/dnsmasq.d/hotspot.conf
+	cat $CONF_DIR/hotspot.conf.eth0 >>/etc/dnsmasq.d/zorgbox.conf
 	EXCLUDE_IF=""
 fi
 
@@ -63,19 +63,27 @@ if [ $? -eq 0 ] ; then
 	cat /etc/sysctl.conf  | grep -v net.ipv4.ip_forward>/tmp/$$.conf
 	mv /tmp/$$.conf /etc/sysctl.conf
 	echo 0 > /proc/sys/net/ipv4/ip_forward
+	EXCLUDE_IF="wlan0"
 
 
-else
+fi
+egrep '"wlan0Mode": "hotspot"|"eth0Mode": "hotspot"' $CONF >/dev/null
+if [ $? -eq 0 ] ; then
 	PASS=`cat $CONF | grep hotspotPASS|awk -F '"' '{print $4}'`
 	SSID=`hostname`
 	cat $CONF_DIR/hostapd.conf | sed "s/HOSTNAME/$SSID/"|sed "s/PASS/$PASS/" >/etc/hostapd/hostapd.conf
-	cat $CONF_DIR/interfaces.wlan0.hotspot  >>/etc/network/interfaces
-	GW=`cat $CONF | grep ifGw|awk -F '"' '{print $4}'`	
+	grep '"wlan0Mode": "hotspot"' $CONF >/dev/null
+	if [ $? -eq 0 ] ; then 
+		cat $CONF_DIR/interfaces.wlan0.hotspot  >>/etc/network/interfaces	
+		GW=`cat $CONF | grep ifGw|awk -F '"' '{print $4}'`	
+		cat $CONF_DIR/hotspot.conf.wlan0 >>/etc/dnsmasq.d/zorgbox.conf
+	else
+		GW=wlan0
+	fi
 	cat $CONF_DIR/iptables.ipv4.nat | grep -v " $EXCLUDE_IF " |sed "s/IFGW/$GW/g" > /etc/iptables.ipv4.nat
 	iptables-restore /etc/iptables.ipv4.nat
 	cat $CONF_DIR/dnsmasq.conf | sed "s/no-dhcp-interface=.*/no-dhcp-interface=$EXCLUDE_IF/" > /etc/dnsmasq.conf
 
-	cat $CONF_DIR/hotspot.conf.wlan0 >>/etc/dnsmasq.d/hotspot.conf
 
 
 	cat /etc/sysctl.conf  | grep -v net.ipv4.ip_forward>/tmp/$$.conf

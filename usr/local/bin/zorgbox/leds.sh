@@ -104,10 +104,12 @@ while [ -f /var/run/leds.run ] ; do
 	else
 		gpio write $PING_PIN 0
 	fi
-	mount | grep "/media" >/dev/null 2>&1
+	mount | grep "/media"  >/dev/null 2>&1
 	if [ $? -ne 0 ] ; then
 		[ -f /var/run/scan.run ] && rm /var/run/scan.run && sleep 1
 	else
+		
+		echo gpio write $MOUNT_PIN 1
 		gpio write $MOUNT_PIN 1
 	fi
 	ifconfig wlan0 | grep "inet adr:" >/dev/null 2>&1

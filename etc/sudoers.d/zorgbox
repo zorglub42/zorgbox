@@ -6,4 +6,5 @@ Cmnd_Alias	SET_HOSTNAME=/usr/local/bin/zorgbox/set-hostname
 Cmnd_Alias	SHUTDOWN=/usr/local/bin/zorgbox/shutdown
 Cmnd_Alias	RESTART=/usr/local/bin/zorgbox/restart
 Cmnd_Alias	TECH_DATA=/usr/local/bin/zorgbox/display-tech-data
-User_Alias      F314_USER=www-data  F314_USER       ALL = NOPASSWD: SSID_LIST, SET_WIFI_CREDS, SHUTDOWN, SET_HOTSPOT, SET_HOSTNAME, TECH_DATA, RESTART
+Cmnd_Alias	KODI_MNGR=/usr/local/bin/zorgbox/kodi-mngr
+User_Alias      ZORG_BOX_USER=www-data  ZORG_BOX_USER       ALL = NOPASSWD: SSID_LIST, SET_WIFI_CREDS, SHUTDOWN, SET_HOTSPOT, SET_HOSTNAME, TECH_DATA, RESTART, KODI_MNGR

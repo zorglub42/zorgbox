@@ -23,8 +23,16 @@
  * 1.0.0 - 2015-11-18 : Release of the file
 */
 
+function restCheckAuth(){
+	try{
+		checkAuth(false);
+	}catch (Exception $e){
+		throw new RestException(401,Localization::getString("connexion.invalid.creds"));
+	}
+}
+
 function checkAuth($redirect=true){
-	session_start();
+	@session_start();
 	$validSession=false;
 	$validSession=isset($_COOKIE["zorgbox-auth"]) && isset($_SESSION["zorgbox-auth"]) && ($_SESSION["zorgbox-auth"]==$_COOKIE["zorgbox-auth"]);
 	
@@ -32,7 +40,7 @@ function checkAuth($redirect=true){
 		if ($redirect){
 			header("Location: loginFom.php", 301);
 		}else{
-			throw new Execption("Invalid creds");
+			throw new Exception("Invalid creds");
 		}
 		
 	}

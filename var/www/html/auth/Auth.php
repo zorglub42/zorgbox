@@ -63,11 +63,7 @@ class Auth{
 	 * @url GET /password/changed
 	 */
 	 function passwordChanged($password){
-		try{
-			checkAuth(false);
-		}catch (Exception $e){
-			throw new RestException(401, Localization::getString("connexion.invalid.creds"));
-		}
+		restCheckAuth();
 		if ($password != getCurPass()){
 			return Array("changed"=>1);
 		}else{
@@ -79,11 +75,7 @@ class Auth{
 	 * @url POST /password
 	 */
 	 function updatePassord($password){
-		try{
-			checkAuth(false);
-		}catch (Exception $e){
-			throw new RestException(401, Localization::getString("connexion.invalid.creds"));
-		}
+		restCheckAuth();
 		$creds=json_decode(file_get_contents("/etc/zorgbox/credentials.json"),true);
 		for ($i=0;$i<count($creds);$i++){
 			if ($creds[$i]["username"] == $_SESSION["zorgbox-auth.who"]){
