@@ -115,8 +115,12 @@ if [ $? -ne 0 ] ; then
 	git clone git://git.drogon.net/wiringPi
 	cd wiringPi
 	./build
-	cd examples
-	gcc -Wall -lwiringPi -o /usr/local/bin/fade pwm.c
+	cd $CUR_DIR
+
+
+	echo 'Making fade effect'
+	cd /usr/local/src/fade
+	make clean;make install
 	cd $CUR_DIR
 
 	echo 'Making ARMV6 compliant lcd utilites'
