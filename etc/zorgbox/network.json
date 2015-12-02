@@ -2,9 +2,9 @@
     "wlan0Mode": "client",
     "eth0Mode": "client",
     "hotspotPASS": "0123456789",
-    "pin": "0000",
-    "APN": "orange.fr",
-	"APNUser": "orange",
-	"APNPass": "orange",
+    "pin": "",
+    "APN": "",
+	"APNUser": "",
+	"APNPass": "",
     "ifGw": "eth0"
 }
