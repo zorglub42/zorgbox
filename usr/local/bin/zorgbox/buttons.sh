@@ -26,7 +26,7 @@
 
 RELAY_PIN=5
 UP_PIN=4
-RST_PIN=1
+RST_PIN=3
 
 PATH=/usr/local/bin/:$PATH
 

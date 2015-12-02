@@ -22,7 +22,7 @@
  # History     :
  # 1.0.0 - 2015-11-18 : Release of the file
  #
-HEART_BEAT_PIN=3
+HEART_BEAT_PIN=1
 PING_PIN=7
 MOUNT_PIN=0
 WLAN_PIN=2
@@ -68,16 +68,20 @@ echo monitordlna ends
 
 
 function heartBeat(){
+	fade &
+	FADE_PID=$!
 	while [ -f /var/run/leds.run ] ; do
-		gpio write $HEART_BEAT_PIN 1
-		sleep 0.1
-		gpio write $HEART_BEAT_PIN 0
-		sleep 0.1
-		gpio write $HEART_BEAT_PIN 1
-		sleep 0.1
-		gpio write $HEART_BEAT_PIN 0
+#		gpio write $HEART_BEAT_PIN 1
+#		sleep 0.1
+#		gpio write $HEART_BEAT_PIN 0
+#		sleep 0.1
+#		gpio write $HEART_BEAT_PIN 1
+#		sleep 0.1
+#		gpio write $HEART_BEAT_PIN 0
 		sleep 1
 	done
+	kill $FADE_PIN
+	gpio pwm $HEART_BIT_PIN 0
 	gpio write $PING_PIN 0
 	gpio write $MOUNT_PIN 0
 	gpio write $WLAN_PIN 0

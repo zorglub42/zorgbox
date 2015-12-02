@@ -90,7 +90,7 @@ function doStop(){
 
 trap clearDisplay 1 2 3 6 9 14 15
 echo "stopping" >>/var/log/syslog
-echo  "06:11:43 284.402283 T:1958564400   DEBUG: CAnnouncementManager - Announcement: OnStop from xbmc" >> /home/osmc/.kodi/temp/kodi.log
+ps aux | grep checkkodi | grep -v grep | awk '{print $2}' | xargs kill
 echo  "OSMC ADDON MAIN daemon started" >> /home/osmc/.kodi/temp/kodi.log
 sleep 0.5
 displayWait Arret....

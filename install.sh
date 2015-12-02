@@ -108,14 +108,16 @@ fi
 
 echo "$*" | grep -- "-nc" > /dev/null
 if [ $? -ne 0 ] ; then
-#	echo 'Making ARMV6 compliant wiringPI lib & tools'
-#
-#	cd /usr/local/src/
-#	[ -d wiringPi ] && rm -rf wiringPi
-#	git clone git://git.drogon.net/wiringPi
-#	cd wiringPi
-#	./build
-#	cd $CUR_DIR
+	echo 'Making ARMV6 compliant wiringPI lib & tools'
+
+	cd /usr/local/src/
+	[ -d wiringPi ] && rm -rf wiringPi
+	git clone git://git.drogon.net/wiringPi
+	cd wiringPi
+	./build
+	cd examples
+	gcc -Wall -lwiringPi -o /usr/local/bin/fade pwm.c
+	cd $CUR_DIR
 
 	echo 'Making ARMV6 compliant lcd utilites'
         [ -d /usr/local/src/lcd-sparkfun ] && rm -rf /usr/local/src/lcd-sparkfun
@@ -129,15 +131,15 @@ if [ $? -ne 0 ] ; then
 	make clean; make install
 	cd $CUR_DIR
 
-#	echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
-#	cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
-#	make clean
-#	make
-#	make install
-#	mv hostapd /usr/sbin/hostapd
-#	chown root.root /usr/sbin/hostapd
-#	chmod 755 /usr/sbin/hostapd	
-#	cd $CUR_DIR
+	echo 'Making ARMV6 compliant REALTEK RTL8188CUS dongle'
+	cd /usr/local/src/wpa_supplicant_hostapd-0.8_rtw_r7475.20130812/hostapd
+	make clean
+	make
+	make install
+	mv hostapd /usr/sbin/hostapd
+	chown root.root /usr/sbin/hostapd
+	chmod 755 /usr/sbin/hostapd	
+	cd $CUR_DIR
 fi
 
 if [ -d "$CUR_DIR/zorgbox.sav" ] ; then
