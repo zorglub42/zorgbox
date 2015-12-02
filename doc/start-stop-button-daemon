@@ -1,0 +1,25 @@
+#!/bin/bash
+
+RELAY_GPIO=5
+BUTTON_GPIO=4
+
+trap stopRelay 1 2 3 6 9 14 15
+
+function stopRelay(){
+	gpio write $RELAY_GPIO  0
+	exit 0
+}
+gpio mode $RELAY_GPIO out
+gpio mode $BUTTON_GPIO in
+
+gpio write $RELAY_GPIO  1
+while [ 1 ] ; do
+	BUTT=`/usr/local/bin/gpio read $BUTTON_GPIO`
+	if [ $BUTT -eq 1 ] ; then
+		while [ $BUTT -eq 1 ] ; do
+			sleep 0.2
+			BUTT=`/usr/local/bin/gpio read $BUTTON_GPIO `
+		done
+		echo init 0
+	fi
+done
