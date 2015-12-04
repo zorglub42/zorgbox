@@ -68,20 +68,29 @@ echo monitordlna ends
 
 
 function heartBeat(){
-	fade &
-	FADE_PID=$!
-	while [ -f /var/run/leds.run ] ; do
-#		gpio write $HEART_BEAT_PIN 1
-#		sleep 0.1
-#		gpio write $HEART_BEAT_PIN 0
-#		sleep 0.1
-#		gpio write $HEART_BEAT_PIN 1
-#		sleep 0.1
-#		gpio write $HEART_BEAT_PIN 0
-		sleep 1
-	done
-	kill $FADE_PIN
-	gpio pwm $HEART_BIT_PIN 0
+	uname -a | grep armv7l>/dev/null
+	if [ $? -eq 0 ] ; then
+		fade &
+		FADE_PID=$!
+		while [ -f /var/run/leds.run ] ; do
+			sleep 1
+		done
+		kill $FADE_PIN
+		gpio pwm $HEART_BIT_PIN 0
+	else
+		while [ -f /var/run/leds.run ] ; do
+			gpio write $HEART_BEAT_PIN 1
+			sleep 0.1
+			gpio write $HEART_BEAT_PIN 0
+			sleep 0.1
+			gpio write $HEART_BEAT_PIN 1
+			sleep 0.1
+			gpio write $HEART_BEAT_PIN 0
+			sleep 1
+		done
+		gpio write $HEART_BIT_PIN 0
+	fi
+	
 	gpio write $PING_PIN 0
 	gpio write $MOUNT_PIN 0
 	gpio write $WLAN_PIN 0
