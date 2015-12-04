@@ -31,7 +31,7 @@ if [ $? -ne 0 ] ; then
 	apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 2C0D3C0F 
 
 	apt-get update
-	apt-get -y upgrade
+	apt-get -y --force-yes upgrade
 
 	git &>/dev/null
 	if [ $? -eq 127 ] ; then
