@@ -36,7 +36,7 @@ if [ $? -ne 0 ] ; then
 	git &>/dev/null
 	if [ $? -eq 127 ] ; then
 		#git is not yet istalled
-		apt-get install git-core
+		apt-get -y install git-core
 	fi
 
 	apt-get -y --force-yes install net-tools ifupdown ppp rdnssd iproute2-doc isc-dhcp-client libatm1 resolvconf  ndisc6 perl-doc alsa-utils \
