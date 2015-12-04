@@ -35,7 +35,7 @@ ZorgBox is distributed as Apache2 free software license
 
 - OR BETTER !!! All in one ! 
 
-		sudo bash -c "cd ; wget https://raw.githubusercontent.com/zorglub42/zorgbox/master/install.sh; bash install.sh;rm install.sh"
+		sudo bash -c "cd ; wget https://raw.githubusercontent.com/zorglub42/zorgbox/master/install.sh -O install; bash ./install;rm install"
 
 By the end of the install process it will ask you for a brand new password for the user osmc (security reason) and it will reboot.
 
