@@ -125,7 +125,7 @@ while [ -f /var/run/leds.run ] ; do
 		echo gpio write $MOUNT_PIN 1
 		gpio write $MOUNT_PIN 1
 	fi
-	ifconfig wlan0 | grep "inet adr:" >/dev/null 2>&1
+	ifconfig wlan0 | grep "inet addr:" >/dev/null 2>&1
 	if [ $? -eq 0 ] ; then
 		gpio write $WLAN_PIN 1
 	else
